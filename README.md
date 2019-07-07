@@ -28,9 +28,9 @@ It uses Firebase FireStore as Database and Firebase Storage.(Currently I'm plann
 - [ ] Profile Editing.
 - [ ] Dark Mode
 
-##Screenshots
+## Screenshots
 
-###soon......
+### soon......
 
 ## Getting Started
 
