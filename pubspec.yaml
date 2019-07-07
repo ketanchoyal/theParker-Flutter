@@ -10,7 +10,8 @@ dependencies:
     sdk: flutter
   provider: ^3.0.0+1
   get_it: ^1.0.3+2
-  font_awesome_flutter: ^8.4.0
+  # intro_views_flutter: ^2.6.0
+  eva_icons_flutter: ^2.0.0
 
   cupertino_icons: ^0.1.2
 
@@ -21,3 +22,23 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - assets/
+
+  fonts:
+
+    - family: K2D
+      fonts:
+        - asset: assets/fonts/K2D-Light.ttf
+          weight: 300
+        - asset: assets/fonts/K2D-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/K2D-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/K2D-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/K2D-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/K2D-ExtraBold.ttf
+          weight: 900
