@@ -12,8 +12,8 @@ dependencies:
   get_it: ^1.0.3+2
   # intro_views_flutter: ^2.6.0
   eva_icons_flutter: ^2.0.0
-
   cupertino_icons: ^0.1.2
+  # flutter_lottie: ^0.2.0
 
 dev_dependencies:
   flutter_test:

@@ -8,6 +8,8 @@ import 'package:the_parker/UI/Widgets/TopBar.dart';
 import 'ForgotPassword.dart';
 import 'package:flutter/material.dart';
 
+import 'Login.dart';
+
 enum ButtonType { LOGIN, REGISTER }
 
 class LoginPage extends StatefulWidget {
@@ -67,6 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                         ? Kstrings.login
                         : Kstrings.register,
                     onPressed: () {
+                      // kopenPage(context, Login());
                     },
                   ),
                 ],
@@ -189,7 +192,4 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-}
-
-class ProfilePage {
 }
