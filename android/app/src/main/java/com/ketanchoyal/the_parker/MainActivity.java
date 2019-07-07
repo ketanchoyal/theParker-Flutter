@@ -1,4 +1,4 @@
-package com.example.the_parker;
+package com.ketanchoyal.the_parker;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;
