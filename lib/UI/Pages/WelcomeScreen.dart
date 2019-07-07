@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/Resources.dart';
-import 'Widgets/IntroView/Models/page_view_model.dart';
-import 'Widgets/IntroView/intro_views_flutter.dart';
+import 'package:the_parker/UI/Resources/ConstantMethods.dart';
+import 'package:the_parker/UI/Resources/Resources.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/page_view_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/intro_views_flutter.dart';
+
+import 'Login/LoginPage.dart';
 
 class WelcomeScreen extends StatelessWidget {
   List<PageViewModel> page(BuildContext context) {
@@ -150,8 +153,10 @@ class WelcomeScreen extends StatelessWidget {
                 child: MaterialButton(
                   height: 50,
                   minWidth: MediaQuery.of(context).size.width - 100,
-                  elevation: 10,
-                  onPressed: () {},
+                  elevation: 0,
+                  onPressed: () {
+                    kopenPage(context, LoginPage());
+                  },
                   color: Colors.white,
                   child: Text(
                     'Login',

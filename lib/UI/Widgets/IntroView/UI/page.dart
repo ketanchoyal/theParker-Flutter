@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/Widgets/IntroView/Models/page_view_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/page_view_model.dart';
 
 /// This is the class which contains the Page UI.
 class Page extends StatelessWidget {

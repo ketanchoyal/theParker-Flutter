@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/Widgets/IntroView/Constants/constants.dart';
-import 'package:the_parker/Widgets/IntroView/Models/page_button_view_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/page_button_view_model.dart';
 
 /// Skip, Next, and Back button class
 

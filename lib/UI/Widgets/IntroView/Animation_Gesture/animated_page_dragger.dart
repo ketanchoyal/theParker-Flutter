@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:the_parker/Widgets/IntroView/Constants/constants.dart';
-import 'package:the_parker/Widgets/IntroView/Models/slide_update_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/slide_update_model.dart';
 
 /// This class provides the animation controller
 /// used when then user stops dragging and page

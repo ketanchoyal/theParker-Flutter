@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/Widgets/IntroView/Constants/constants.dart';
-import 'package:the_parker/Widgets/IntroView/Models/page_bubble_view_model.dart';
-import 'package:the_parker/Widgets/IntroView/Models/pager_indicator_view_model.dart';
-import 'package:the_parker/Widgets/IntroView/UI/page_bubble.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/page_bubble_view_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/pager_indicator_view_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/UI/page_bubble.dart';
 
 /// This class contains the UI elements associated with bottom page indicator.
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:the_parker/Widgets/IntroView/Constants/constants.dart';
-import 'package:the_parker/Widgets/IntroView/Models/slide_update_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/slide_update_model.dart';
 
 /// This class is used to get user gesture and work according to it.
 

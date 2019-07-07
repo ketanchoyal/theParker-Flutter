@@ -1,4 +1,4 @@
-import 'package:the_parker/Widgets/IntroView/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
 
 /// This is view model for the skip and done buttons.
 

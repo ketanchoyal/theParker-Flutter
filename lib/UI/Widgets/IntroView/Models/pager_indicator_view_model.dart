@@ -1,5 +1,5 @@
-import 'package:the_parker/Widgets/IntroView/Constants/constants.dart';
-import 'package:the_parker/Widgets/IntroView/Models/page_view_model.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/IntroView/Models/page_view_model.dart';
 
 //view model for page indicator
 
