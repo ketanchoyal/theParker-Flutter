@@ -10,7 +10,7 @@ class WelcomeScreen extends StatelessWidget {
   List<PageViewModel> page(BuildContext context) {
     return [
       PageViewModel(
-        pageColor: Color(0xff1976D2),
+        pageColor: Color(0xffFFDA56),
         title: Text(
           Kstrings.screen1_1,
           textAlign: TextAlign.center,
@@ -34,7 +34,7 @@ class WelcomeScreen extends StatelessWidget {
         textStyle: TextStyle(color: Colors.white),
       ),
       PageViewModel(
-        pageColor: Color(0xff40C4FF),
+        pageColor: Color(0xff2CE7E7),
         title: Text(
           Kstrings.screen2_1,
           textAlign: TextAlign.center,
@@ -58,7 +58,7 @@ class WelcomeScreen extends StatelessWidget {
         textStyle: TextStyle(color: Colors.white),
       ),
       PageViewModel(
-        pageColor: Color(0xffE57373),
+        pageColor: Color(0xff3ABA68),
         title: Text(
           Kstrings.screen3_1,
           textAlign: TextAlign.center,
@@ -79,7 +79,7 @@ class WelcomeScreen extends StatelessWidget {
         textStyle: TextStyle(color: Colors.white),
       ),
       PageViewModel(
-        pageColor: Color(0xffC51162),
+        pageColor: Color(0xffED5575),
         title: Text(
           Kstrings.screen4_1,
           textAlign: TextAlign.center,
