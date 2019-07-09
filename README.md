@@ -10,23 +10,25 @@ It uses Firebase FireStore as Database and Firebase Storage.(Currently I'm plann
 
 ## FeatureS:
 
-- [ ] Live Parking Spots on Google Map
-- [ ] Login using Google.
-- [ ] Login Using mobile Number.
-- [ ] Upload Your parking Spot
-- [ ] Search Parking Space.
-- [ ] Login Using Email.
-- [ ] Check previous transactions.
-- [ ] Add my Cars.
-- [ ] Book Parking.
-- [ ] Upload parking Photos.
-- [ ] Get direction to the parking spot.
-- [ ] Call the spot owner.
-- [ ] See previous parking Spot Added.
-- [ ] Check previous Booking.
-- [ ] Local Notification.
-- [ ] Profile Editing.
-- [ ] Dark Mode
+|  UI  | Logic | Feature |
+| ------ | ------ | ------|
+|  |  |Live Parking Spots on Google Map
+|  |  | Login using Google.
+|  |  | Login Using mobile Number.
+|  |  | Upload Your parking Spot
+|  |  | Search Parking Space.
+| ✔ |  |Login Using Email.
+|  |  | Check previous transactions.
+|  |  | Add my Cars.
+|  |  | Book Parking.
+|  |  | Upload parking Photos.
+|  |  | Get direction to the parking spot.
+|  |  | Call the spot owner.
+|  |  | See previous parking Spot Added.
+|  |  | Check previous Booking.
+|  |  | Local Notification.
+|  |  | Profile Editing.
+|  |  | Dark Mode
 
 ## Screenshots
 
