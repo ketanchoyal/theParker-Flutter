@@ -60,7 +60,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     child: Text(
                       Kstrings.send_recovery_mail,
                       style: TextStyle(
-                        // color: kmainColorTeacher,
+                        color: Colors.white,
                         fontSize: 15,
                       ),
                     ),

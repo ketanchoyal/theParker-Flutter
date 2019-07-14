@@ -59,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                            kopenPageBottom(context, MobileLoginPage());
                           },
                           height: 50,
-                          backgroundColor: Colors.redAccent,
+                          // backgroundColor: Colors.redAccent,
                         ),
                       ),
                     ),
@@ -143,7 +143,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 notYetRegisteringText,
                                 style: TextStyle(
-                                  // color: kmainColorTeacher,
+                                  color: Colors.white,
                                   fontSize: 15,
                                 ),
                               ),
@@ -166,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                               child: Text(
                                 Kstrings.need_help,
                                 style: TextStyle(
-                                  // color: kmainColorTeacher,
+                                  color: Colors.white,
                                   fontSize: 15,
                                 ),
                               ),

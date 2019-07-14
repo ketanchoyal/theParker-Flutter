@@ -18,7 +18,7 @@ class ReusableRoundedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: backgroundColor,
+      color: backgroundColor ?? Theme.of(context).primaryColor,
       elevation: elevation ?? 10,
       shape: kRoundedButtonShape,
       child: MaterialButton(
