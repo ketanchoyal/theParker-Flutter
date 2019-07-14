@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Resources/Resources.dart';
+import 'package:the_parker/UI/Widgets/LoginFloating.dart';
 import 'package:the_parker/UI/Widgets/LoginRoundedButton.dart';
 import 'package:the_parker/UI/Widgets/ReusableRoundedButton.dart';
 import 'package:the_parker/UI/Widgets/TopBar.dart';
@@ -25,49 +26,29 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
           Navigator.pop(context);
         },
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(left: 31),
-              child: Align(
-                alignment: Alignment.bottomLeft,
-                child: Hero(
-                  tag: 'mobile',
-                  transitionOnUserGestures: true,
-                  child: ReusableRoundedButton(
-                    child: Icon(
-                      Icons.expand_more,
-                      color: Colors.white,
-                    ),
-                    // text: 'Mobile',
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    height: 50,
-                    // backgroundColor: Colors.redAccent,
-                  ),
-                ),
-              ),
-            ),
-            LoginRoundedButton(
-              onPressed: () {
-              },
-            ),
-          ],
-        ),
+      floatingActionButton: LoginFloatingButtons(
+        icon: Icons.expand_more,
+        label: 'Login',
+        onPressedLeft: () {
+          Navigator.pop(context);
+        },
+        onPressedRight: () {},
       ),
       body: SingleChildScrollView(
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              // fit: StackFit.expand,
-              children: [
-                Column(
+        child: Column(
+          children: <Widget>[
+            Hero(
+              tag: 'imageee',
+              child: Image.asset(
+                Kassets.group,
+                // width: MediaQuery.of(context).size.width - 50,
+                alignment: Alignment.center,
+              ),
+            ),
+            SafeArea(
+              child: Padding(
+                padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+                child: Column(
                   // mainAxisSize: MainAxisSize.min,
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
@@ -113,7 +94,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                             child: Text(
                               Kstrings.send_otp,
                               style: TextStyle(
-                                // color: kmainColorTeacher,
+                                color: Colors.white,
                                 fontSize: 15,
                               ),
                             ),
@@ -130,9 +111,9 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

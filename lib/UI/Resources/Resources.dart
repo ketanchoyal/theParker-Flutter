@@ -14,6 +14,7 @@ class Kassets {
   static const shakeHands = 'assets/shake_hands.png';
   static const userFriendly = 'assets/user_friendly.png';
   static const way = 'assets/way.png';
+  static const group = 'assets/Group.png';
 }
 
 class Kstrings {
