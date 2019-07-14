@@ -1,0 +1,198 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:the_parker/UI/Pages/Login/LoginPage.dart';
+import 'package:the_parker/UI/Resources/ConstantMethods.dart';
+import 'package:the_parker/UI/Widgets/LiquidSwipe/Animation_Gesture/animated_page_dragger.dart';
+import 'package:the_parker/UI/Widgets/LiquidSwipe/Animation_Gesture/page_dragger.dart';
+import 'package:the_parker/UI/Widgets/LiquidSwipe/Constants/constants.dart';
+import 'package:the_parker/UI/Widgets/LiquidSwipe/page.dart';
+
+import 'Animation_Gesture/page_reveal.dart';
+
+class LiquidSwipe extends StatefulWidget {
+  final List<Container> pages;
+  final double fullTransition;
+
+  const LiquidSwipe({
+    Key key,
+    this.pages,
+    this.fullTransition = FULL_TARNSITION_PX,
+  }) : super(key: key);
+
+  @override
+  State<StatefulWidget> createState() => _LiquidSwipe();
+}
+
+class SlideUpdate {
+  final UpdateType updateType;
+  final SlideDirection direction;
+  final double slidePercent;
+
+  SlideUpdate(
+    this.direction,
+    this.slidePercent,
+    this.updateType,
+  );
+}
+
+class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
+  StreamController<SlideUpdate>
+      // ignore: close_sinks
+      slideUpdateStream; //Stream controller is used to get all the updates when user slides across screen.
+
+  AnimatedPageDragger
+      animatedPageDragger; //When user stops dragging then by using this page automatically drags.
+
+  int activePageIndex = 0; //active page index
+  int nextPageIndex = 0; //next page index
+  SlideDirection slideDirection = SlideDirection.none; //slide direction
+  double slidePercent = 0.0; //slide percentage (0.0 to 1.0)
+  StreamSubscription<SlideUpdate> slideUpdateStream$;
+
+  @override
+  void initState() {
+    //Stream Controller initialization
+    slideUpdateStream = StreamController<SlideUpdate>();
+    //listening to updates of stream controller
+    slideUpdateStream$ = slideUpdateStream.stream.listen((SlideUpdate event) {
+      setState(() {
+        //setState is used to change the values dynamically
+
+        //if the user is dragging then
+        if (event.updateType == UpdateType.dragging) {
+          slideDirection = event.direction;
+          slidePercent = event.slidePercent;
+
+          //conditions on slide direction
+          if (slideDirection == SlideDirection.leftToRight) {
+            if (nextPageIndex < widget.pages.length && nextPageIndex > 0)
+              nextPageIndex = activePageIndex - 1;
+          } else if (slideDirection == SlideDirection.rightToLeft) {
+            if (nextPageIndex < widget.pages.length - 1)
+              nextPageIndex = activePageIndex + 1;
+          } else {
+            nextPageIndex = activePageIndex;
+          }
+          // making pages to be in loop
+          // if (nextPageIndex > widget.pages.length - 1)
+          //   nextPageIndex = 0;
+          // else if (nextPageIndex < 0) nextPageIndex = widget.pages.length - 1;
+        }
+        //if the user has done dragging
+        else if (event.updateType == UpdateType.doneDragging) {
+          // slidepercent > 0.2 so that it wont reveal itself unless this condition is true
+          if (slidePercent > 0.2) {
+            animatedPageDragger = AnimatedPageDragger(
+              slideDirection: slideDirection,
+              transitionGoal: TransitionGoal.open,
+              slidePercent: slidePercent,
+              slideUpdateStream: slideUpdateStream,
+              vsync: this,
+            );
+          } else {
+            animatedPageDragger = AnimatedPageDragger(
+              slideDirection: slideDirection,
+              transitionGoal: TransitionGoal.close,
+              slidePercent: slidePercent,
+              slideUpdateStream: slideUpdateStream,
+              vsync: this,
+            );
+            nextPageIndex = activePageIndex;
+            //to continue in the loop of pages
+            if (nextPageIndex > widget.pages.length - 1)
+              nextPageIndex = 0;
+            else if (nextPageIndex < 0) nextPageIndex = widget.pages.length - 1;
+          }
+          //Run the animation
+          animatedPageDragger.run();
+        }
+        //when animating
+        else if (event.updateType == UpdateType.animating) {
+          slideDirection = event.direction;
+          slidePercent = event.slidePercent;
+        }
+        //done animating
+        else if (event.updateType == UpdateType.doneAnimating) {
+          activePageIndex = nextPageIndex;
+          slideDirection = SlideDirection.none;
+          slidePercent = 0.0;
+        }
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    slideUpdateStream$?.cancel();
+    animatedPageDragger?.dispose();
+    slideUpdateStream?.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<Container> pages = widget.pages;
+    return Scaffold(
+      //Stack is used to place components over one another.
+      resizeToAvoidBottomPadding: false,
+      body: Stack(
+        children: <Widget>[
+          Page(
+            pageView: slideDirection == SlideDirection.leftToRight
+                ? pages[activePageIndex]
+                : pages[nextPageIndex],
+            percentVisible: 1.0,
+          ),
+          //Pages
+          PageReveal(
+            //next page reveal
+            revealPercent: slidePercent,
+            child: Page(
+                pageView: slideDirection == SlideDirection.leftToRight
+                    ? pages[nextPageIndex]
+                    : pages[activePageIndex],
+                percentVisible: slidePercent),
+            slideDirection: slideDirection,
+          ),
+
+          PageDragger(
+            //Used for gesture control
+            fullTransitionPX: widget.fullTransition,
+            slideUpdateStream: this.slideUpdateStream,
+          ), //PageDragger
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.12,
+            width: MediaQuery.of(context).size.width,
+            // left: MediaQuery.of(context).size.width/2 - 40,
+            child: Align(
+              alignment: Alignment.center,
+              child: Hero(
+                tag: 'title',
+                transitionOnUserGestures: true,
+                child: MaterialButton(
+                  height: 50,
+                  minWidth: MediaQuery.of(context).size.width - 100,
+                  elevation: 0,
+                  onPressed: () {
+                    kopenPage(context, LoginPage());
+                  },
+                  color: Colors.white,
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ], //Widget
+      ), //Stack
+    ); //Scaffold
+  }
+}

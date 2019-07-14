@@ -1,24 +1,22 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Widgets/IntroView/Constants/constants.dart';
-import 'package:the_parker/UI/Widgets/IntroView/Models/slide_update_model.dart';
+import 'package:the_parker/UI/Widgets/LiquidSwipe/Constants/constants.dart';
+
+import '../liquid_swipe.dart';
 
 /// This class is used to get user gesture and work according to it.
 
 class PageDragger extends StatefulWidget {
-  //These bool variables are used to check whether user can drag left or right or none.
-  final bool canDragLeftToRight;
-  final bool canDragRightToLeft;
   final double fullTransitionPX;
+
   //Stream controller
   final StreamController<SlideUpdate> slideUpdateStream;
 
   //Constructor
   PageDragger({
-    this.canDragLeftToRight,
-    this.canDragRightToLeft,
     this.slideUpdateStream,
-    this.fullTransitionPX = FULL_TARNSITION_PX,
+    this.fullTransitionPX = FULL_TARNSITION_PX, //see Constants file
   }) : assert(fullTransitionPX != null);
 
   @override
@@ -45,9 +43,9 @@ class _PageDraggerState extends State<PageDragger> {
       final dx = dragStart.dx - newPosition.dx;
 
       //predicting slide direction
-      if (dx > 0.0 && widget.canDragRightToLeft) {
+      if (dx > 0.0) {
         slideDirection = SlideDirection.rightToLeft;
-      } else if (dx < 0.0 && widget.canDragLeftToRight) {
+      } else if (dx < 0.0) {
         slideDirection = SlideDirection.leftToRight;
       } else {
         slideDirection = SlideDirection.none;

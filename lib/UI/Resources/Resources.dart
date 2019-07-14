@@ -24,7 +24,7 @@ class Kstrings {
   static const screen2_1 = 'Give your parking for Extra Cash';
   static const screen2_2 = 'Share your location for users to see your parking location.';
 
-  static const screen3_1 = 'User Friendly App';
+  static const screen3_1 = 'User Friendly App ';
   static const screen3_2 = 'Select location and we will direct you there.';
 
   static const screen4_1 = 'Your Car is in good hands';

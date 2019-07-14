@@ -1,7 +1,6 @@
 /// This package contains all the constants used.
 
-const BUBBLE_WIDTH =35.0;
-
+/// A constant value with works like a sensitivity of reveal.
 const FULL_TARNSITION_PX = 300.0;
 
 const PERCENT_PER_MILLISECOND = 0.00125;
