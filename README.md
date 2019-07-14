@@ -14,10 +14,11 @@ It uses Firebase FireStore as Database and Firebase Storage.(Currently I'm plann
 | ------ | ------ | ------|
 |  |  |Live Parking Spots on Google Map
 |  |  | Login using Google.
-| :fa-check: |  | Login Using mobile Number.
+| ✔ |  | Login Using mobile Number.
 |  |  | Upload Your parking Spot
 |  |  | Search Parking Space.
-| :fa-check: |  |Login Using Email.
+| ✔ |  |Login Using Email.
+| ✔ | ✔ |Intro Screens.
 |  |  | Check previous transactions.
 |  |  | Add my Cars.
 |  |  | Book Parking.
