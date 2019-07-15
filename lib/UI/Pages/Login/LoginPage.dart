@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
         },
       ),
       body: SingleChildScrollView(
-              child: Stack(
+        child: Stack(
           children: <Widget>[
             Column(
               children: <Widget>[

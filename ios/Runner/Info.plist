@@ -4,6 +4,10 @@
 <dict>
 <key>io.flutter.embedded_views_preview</key>
 <true />
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>I need it </string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Because</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleExecutable</key>
