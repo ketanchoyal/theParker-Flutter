@@ -55,6 +55,7 @@ class _TopBarState extends State<TopBar> {
                 tag: 'title',
                 transitionOnUserGestures: true,
                 child: Card(
+                  // color: Theme.of(context).cardColor.withOpacity(0.3),
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.only(

@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Kcolors.primary,
           primaryColorDark: Kcolors.primaryDark,
           primarySwatch: Colors.red,
+          // brightness: Brightness.dark,
           accentColor: Kcolors.accent),
       home: WelcomeScreen(),
     );

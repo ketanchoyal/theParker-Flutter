@@ -26,7 +26,8 @@ Container intro(BuildContext context, String heading, String subTitle,
           children: <Widget>[
             // SizedBox(height: 10,),
             Container(
-              padding: EdgeInsets.all(8),
+              padding:
+                  EdgeInsets.only(bottom: 10, left: 20, right: 20, top: 30),
               child: Center(
                 child: Text(
                   heading,
@@ -39,20 +40,27 @@ Container intro(BuildContext context, String heading, String subTitle,
                 ),
               ),
             ),
-            SizedBox(height: 10,),
+            // SizedBox(
+            //   height: 10,
+            // ),
             Image.asset(
               imageAsset,
-              width: MediaQuery.of(context).size.width - 50,
+              width: MediaQuery.of(context).size.width - 100,
               alignment: Alignment.center,
             ),
-            SizedBox(height: 10,),
-            Text(
-              subTitle,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15.0,
-                  fontWeight: FontWeight.w400),
+            SizedBox(
+              height: 10,
+            ),
+            Container(
+              padding: EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 10),
+              child: Text(
+                subTitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.w500),
+              ),
             ),
           ],
         ),

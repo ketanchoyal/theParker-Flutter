@@ -109,6 +109,9 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                         ),
                       ),
                     ),
+                    SizedBox(
+                      height: 100,
+                    ),
                   ],
                 ),
               ),
