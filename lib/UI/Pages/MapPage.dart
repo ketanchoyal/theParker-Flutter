@@ -246,8 +246,8 @@ class MapPageState extends State<MapPage> {
   Widget _buildParallexCards() {
     return Positioned(
       bottom: 50,
-      left: 10,
-      right: 10,
+      left: 0,
+      right: 0,
       child: Padding(
         padding: EdgeInsets.only(bottom: 30.0),
         child: SizedBox.fromSize(
