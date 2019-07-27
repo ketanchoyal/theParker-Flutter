@@ -14,10 +14,12 @@ import 'Animation_Gesture/page_reveal.dart';
 class LiquidSwipe extends StatefulWidget {
   final List<Container> pages;
   final double fullTransition;
+  final Widget widget;
 
   const LiquidSwipe({
     Key key,
     this.pages,
+    this.widget,
     this.fullTransition = FULL_TARNSITION_PX,
   }) : super(key: key);
 
@@ -163,34 +165,7 @@ class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
             fullTransitionPX: widget.fullTransition,
             slideUpdateStream: this.slideUpdateStream,
           ), //PageDragger
-          Positioned(
-            bottom: MediaQuery.of(context).size.height * 0.12,
-            width: MediaQuery.of(context).size.width,
-            // left: MediaQuery.of(context).size.width/2 - 40,
-            child: Align(
-              alignment: Alignment.center,
-              child: Hero(
-                tag: 'title',
-                transitionOnUserGestures: true,
-                child: MaterialButton(
-                  height: 50,
-                  minWidth: MediaQuery.of(context).size.width - 100,
-                  elevation: 0,
-                  onPressed: () {
-                    kopenPage(context, LoginPage());
-                  },
-                  color: Colors.white,
-                  child: Text(
-                    'Login',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          widget.widget,
         ], //Widget
       ), //Stack
     ); //Scaffold

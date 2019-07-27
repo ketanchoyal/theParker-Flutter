@@ -1,8 +1,7 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Resources/Resources.dart';
-import 'package:the_parker/UI/Widgets/LoginFloating.dart';
-import 'package:the_parker/UI/Widgets/LoginRoundedButton.dart';
 import 'package:the_parker/UI/Widgets/ReusableRoundedButton.dart';
 import 'package:the_parker/UI/Widgets/TopBar.dart';
 
@@ -26,13 +25,32 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
           Navigator.pop(context);
         },
       ),
-      floatingActionButton: LoginFloatingButtons(
-        icon: Icons.expand_more,
-        label: 'Login',
-        onPressedLeft: () {
-          Navigator.pop(context);
-        },
-        onPressedRight: () {},
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 31),
+            child: FloatingActionButton.extended(
+                heroTag: 'abc',
+                label: Container(),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Icon(EvaIcons.emailOutline),
+                )),
+          ),
+          FloatingActionButton.extended(
+              label: Text(
+                'Login',
+                style: ktitleStyle,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(EvaIcons.logIn)),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -41,7 +59,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
               tag: 'imageee',
               child: Image.asset(
                 Kassets.group,
-                // width: MediaQuery.of(context).size.width - 50,
+                width: MediaQuery.of(context).size.width - 50,
                 alignment: Alignment.center,
               ),
             ),

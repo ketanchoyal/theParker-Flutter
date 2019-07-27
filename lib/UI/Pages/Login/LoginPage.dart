@@ -1,8 +1,8 @@
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:the_parker/UI/Pages/Home.dart';
 import 'package:the_parker/UI/Pages/Login/MobileLoginPage.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Resources/Resources.dart';
-import 'package:the_parker/UI/Widgets/LoginFloating.dart';
 import 'package:the_parker/UI/Widgets/ReusableRoundedButton.dart';
 import 'package:the_parker/UI/Widgets/TopBar.dart';
 import 'ForgotPassword.dart';
@@ -34,52 +34,82 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.pop(context);
         },
       ),
-      floatingActionButton: LoginFloatingButtons(
-        label:
-            buttonType == ButtonType.LOGIN ? Kstrings.login : Kstrings.register,
-        onPressedLeft: () {
-          kopenPageBottom(context, MobileLoginPage());
-        },
-        icon: Icons.phone,
-        onPressedRight: () {
-          kopenPage(context, HomePage());
-        },
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(left: 31),
+            child: FloatingActionButton.extended(
+                heroTag: 'abc',
+                label: Container(),
+                onPressed: () {
+                  kopenPageBottom(context, MobileLoginPage());
+                },
+                icon: Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Icon(EvaIcons.phone),
+                )),
+          ),
+          FloatingActionButton.extended(
+              label: Text(
+                buttonType == ButtonType.LOGIN
+                    ? Kstrings.login
+                    : Kstrings.register,
+                style: ktitleStyle,
+              ),
+              onPressed: () {
+                kopenPage(context, HomePage());
+              },
+              icon: Icon(EvaIcons.logIn)),
+        ],
       ),
       body: SingleChildScrollView(
-        child: Stack(
+        child: Column(
           children: <Widget>[
-            Column(
-              children: <Widget>[
-                Hero(
-                  tag: 'imageee',
-                  child: Image.asset(
-                    Kassets.group,
-                    // width: MediaQuery.of(context).size.width - 50,
-                    alignment: Alignment.center,
+            Hero(
+              tag: 'imageee',
+              child: Image.asset(
+                Kassets.group,
+                width: MediaQuery.of(context).size.width - 50,
+                alignment: Alignment.center,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 20, right: 20, top: 10),
+              child: Column(
+                children: <Widget>[
+                  SizedBox(
+                    height: 10,
                   ),
-                ),
-                SafeArea(
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextField(
-                          onChanged: (email) {},
-                          keyboardType: TextInputType.emailAddress,
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.w500),
-                          decoration: kTextFieldDecoration.copyWith(
-                            hintText: Kstrings.email_hint,
-                            labelText: Kstrings.email,
-                          ),
-                        ),
-                        SizedBox(
+                  TextField(
+                    onChanged: (email) {},
+                    keyboardType: TextInputType.emailAddress,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    decoration: kTextFieldDecoration.copyWith(
+                      hintText: Kstrings.email_hint,
+                      labelText: Kstrings.email,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextField(
+                    obscureText: true,
+                    onChanged: (password) {},
+                    keyboardType: TextInputType.emailAddress,
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    decoration: kTextFieldDecoration.copyWith(
+                      hintText: Kstrings.password_hint,
+                      labelText: Kstrings.password,
+                    ),
+                  ),
+                  isRegistered
+                      ? SizedBox(
                           height: 15,
-                        ),
-                        TextField(
+                        )
+                      : Container(),
+                  isRegistered
+                      ? TextField(
                           obscureText: true,
                           onChanged: (password) {},
                           keyboardType: TextInputType.emailAddress,
@@ -87,87 +117,67 @@ class _LoginPageState extends State<LoginPage> {
                               fontSize: 18, fontWeight: FontWeight.w500),
                           decoration: kTextFieldDecoration.copyWith(
                             hintText: Kstrings.password_hint,
-                            labelText: Kstrings.password,
+                            labelText: Kstrings.confirm_password,
                           ),
-                        ),
-                        isRegistered
-                            ? SizedBox(
-                                height: 15,
-                              )
-                            : Container(),
-                        isRegistered
-                            ? TextField(
-                                obscureText: true,
-                                onChanged: (password) {},
-                                keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.w500),
-                                decoration: kTextFieldDecoration.copyWith(
-                                  hintText: Kstrings.password_hint,
-                                  labelText: Kstrings.confirm_password,
-                                ),
-                              )
-                            : Container(),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Hero(
-                          tag: 'otpForget',
-                          child: Container(
-                            height: 50,
-                            width: MediaQuery.of(context).size.width,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                ReusableRoundedButton(
-                                  child: Text(
-                                    notYetRegisteringText,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      if (buttonType == ButtonType.LOGIN) {
-                                        buttonType = ButtonType.REGISTER;
-                                      } else {
-                                        buttonType = ButtonType.LOGIN;
-                                      }
-                                      isRegistered = !isRegistered;
-                                      notYetRegisteringText = isRegistered
-                                          ? Kstrings.registered
-                                          : Kstrings.not_registered;
-                                    });
-                                  },
-                                  height: 40,
-                                ),
-                                ReusableRoundedButton(
-                                  child: Text(
-                                    Kstrings.need_help,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  onPressed: () {
-                                    //Forget Password Logic
-                                    kopenPage(context, ForgotPasswordPage());
-                                  },
-                                  height: 40,
-                                ),
-                              ],
+                        )
+                      : Container(),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  Hero(
+                    tag: 'otpForget',
+                    child: Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          ReusableRoundedButton(
+                            child: Text(
+                              notYetRegisteringText,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
                             ),
+                            onPressed: () {
+                              setState(() {
+                                if (buttonType == ButtonType.LOGIN) {
+                                  buttonType = ButtonType.REGISTER;
+                                } else {
+                                  buttonType = ButtonType.LOGIN;
+                                }
+                                isRegistered = !isRegistered;
+                                notYetRegisteringText = isRegistered
+                                    ? Kstrings.registered
+                                    : Kstrings.not_registered;
+                              });
+                            },
+                            height: 40,
                           ),
-                        ),
-                        SizedBox(
-                          height: 100,
-                        ),
-                      ],
+                          ReusableRoundedButton(
+                            child: Text(
+                              Kstrings.need_help,
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                              ),
+                            ),
+                            onPressed: () {
+                              //Forget Password Logic
+                              kopenPage(context, ForgotPasswordPage());
+                            },
+                            height: 40,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ],
+                  SizedBox(
+                    height: 250,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
