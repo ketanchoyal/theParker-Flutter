@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -7,6 +6,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:search_map_place/search_map_place.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
+import 'package:the_parker/UI/Resources/Resources.dart';
+import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
+import 'package:the_parker/UI/utils/page_transformer.dart';
 
 class MapPage extends StatefulWidget {
   @override
@@ -119,7 +121,7 @@ class MapPageState extends State<MapPage> {
     );
   }
 
-  Map <MarkerId, Marker> markers = Map <MarkerId, Marker>();
+  Map<MarkerId, Marker> markers = Map<MarkerId, Marker>();
   MarkerId selectedMarker;
   static final LatLng center = const LatLng(-33.86711, 151.1947171);
   int _markerIdCounter = 1;
@@ -160,12 +162,10 @@ class MapPageState extends State<MapPage> {
       visible: true,
       markerId: markerId,
       // icon: BitmapDescriptor.,
-      position: LatLng(
-        position.latitude,
-        position.longitude
-        // center.latitude + sin(_markerIdCounter * pi / 6.0) / 20.0,
-        // center.longitude + cos(_markerIdCounter * pi / 6.0) / 20.0,
-      ),
+      position: LatLng(position.latitude, position.longitude
+          // center.latitude + sin(_markerIdCounter * pi / 6.0) / 20.0,
+          // center.longitude + cos(_markerIdCounter * pi / 6.0) / 20.0,
+          ),
       infoWindow: InfoWindow(title: markerIdVal, snippet: 'Hello'),
       onTap: () {
         _onMarkerTapped(markerId);
@@ -176,6 +176,24 @@ class MapPageState extends State<MapPage> {
       markers[markerId] = marker;
     });
   }
+
+  final parallaxCardItemsList = <ParallaxCardItem>[
+    ParallaxCardItem(
+      title: 'Blurryface',
+      body: 'Twenty One Pilots',
+      imagePath: Kassets.group,
+    ),
+    ParallaxCardItem(
+      title: 'Free Spirit',
+      body: 'Khalid',
+      imagePath: Kassets.shakeHands,
+    ),
+    ParallaxCardItem(
+      title: 'Overexposed',
+      body: 'Maroon 5',
+      imagePath: Kassets.parking,
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -208,6 +226,7 @@ class MapPageState extends State<MapPage> {
                   },
                   markers: Set<Marker>.of(markers.values),
                 ),
+                _buildParallexCards()
                 // _builtSearchBar(),
               ],
             );
@@ -219,6 +238,38 @@ class MapPageState extends State<MapPage> {
             await _gotoMyLocation();
           },
           child: Icon(Icons.location_searching),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildParallexCards() {
+    return Positioned(
+      bottom: 50,
+      left: 10,
+      right: 10,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 30.0),
+        child: SizedBox.fromSize(
+          size: Size.fromHeight(200.0),
+          child: PageTransformer(
+            pageViewBuilder: (context, visibilityResolver) {
+              return PageView.builder(
+                controller: PageController(viewportFraction: 0.85),
+                itemCount: parallaxCardItemsList.length,
+                itemBuilder: (context, index) {
+                  final item = parallaxCardItemsList[index];
+                  final pageVisibility =
+                      visibilityResolver.resolvePageVisibility(index);
+
+                  return ParallaxCardsWidget(
+                    item: item,
+                    pageVisibility: pageVisibility,
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );
