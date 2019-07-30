@@ -8,7 +8,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  provider: ^3.0.0+1
   get_it: ^1.0.3+2
   eva_icons_flutter: ^2.0.0
   cupertino_icons: ^0.1.2
@@ -16,20 +15,20 @@ dependencies:
   google_maps_flutter: ^0.5.19+2
   # location: ^2.3.5
   geolocator: ^5.0.1
+  flutter_bloc: ^0.20.0
+  equatable: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
 flutter:
-
   uses-material-design: true
 
   assets:
     - assets/
 
   fonts:
-
     - family: K2D
       fonts:
         - asset: assets/fonts/K2D-Light.ttf

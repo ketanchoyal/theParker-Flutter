@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:the_parker/UI/Pages/Login/LoginPage.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/LiquidSwipe/liquid_swipe.dart';
-
 import 'IntroPage.dart';
-import 'Login/LoginPage.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override

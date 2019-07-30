@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:the_parker/UI/Resources/Resources.dart';
-import 'package:the_parker/UI/Pages/WelcomeScreen.dart';
+import 'UI/Pages/WelcomePage/WelcomeScreen.dart';
 
 void main() {
   Provider.debugCheckInvalidValueType = null;
