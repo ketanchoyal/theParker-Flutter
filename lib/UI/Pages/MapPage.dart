@@ -179,19 +179,25 @@ class MapPageState extends State<MapPage> {
 
   final parallaxCardItemsList = <ParallaxCardItem>[
     ParallaxCardItem(
+      title: 'Overexposed',
+      body: 'Maroon 5',
+      marker: Marker(
+          markerId: MarkerId('nswtdkaslnnad'),
+          position: LatLng(19.017573, 72.856276)),
+    ),
+    ParallaxCardItem(
       title: 'Blurryface',
       body: 'Twenty One Pilots',
-      imagePath: Kassets.group,
+      marker: Marker(
+          markerId: MarkerId('nsdkasnnad'),
+          position: LatLng(19.017573, 72.856276)),
     ),
     ParallaxCardItem(
       title: 'Free Spirit',
       body: 'Khalid',
-      imagePath: Kassets.shakeHands,
-    ),
-    ParallaxCardItem(
-      title: 'Overexposed',
-      body: 'Maroon 5',
-      imagePath: Kassets.parking,
+      marker: Marker(
+          markerId: MarkerId('nsdkasnndswad'),
+          position: LatLng(19.077573, 72.856276)),
     ),
   ];
 
@@ -224,7 +230,7 @@ class MapPageState extends State<MapPage> {
                   onCameraMove: (CameraPosition position) {
                     CameraUpdate.newCameraPosition(position);
                   },
-                  markers: Set<Marker>.of(markers.values),
+                  // markers: Set<Marker>.of(markers.values),
                 ),
                 _buildParallexCards()
                 // _builtSearchBar(),
