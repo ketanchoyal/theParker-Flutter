@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:search_map_place/search_map_place.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
-import 'package:the_parker/UI/Resources/Resources.dart';
 import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
+import 'package:the_parker/UI/Widgets/search_map_place.dart';
 import 'package:the_parker/UI/utils/page_transformer.dart';
 
 class MapPage extends StatefulWidget {
