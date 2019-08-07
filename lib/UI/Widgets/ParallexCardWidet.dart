@@ -77,6 +77,7 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
         child: Text(
           widget.item.body,
           style: ktitleStyle.copyWith(
+            color: Colors.white,
             fontWeight: FontWeight.w600,
             fontSize: 22.0,
           ),
@@ -92,6 +93,7 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
         child: Text(
           widget.item.title,
           style: ktitleStyle.copyWith(
+            color: Colors.white,
             fontWeight: FontWeight.w700,
             fontSize: 20.0,
           ),
@@ -101,8 +103,8 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
     );
 
     return Positioned(
-      top: 5,
-      // bottom: 50.0,
+      // top: 5,
+      bottom: 5.0,
       left: 10.0,
       // right: 10.0,
       child: Column(
@@ -168,12 +170,15 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: 22.0,
-        horizontal: 8.0,
+        vertical: 20.0,
+        horizontal: 5.0,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Material(
+          shadowColor: Theme.of(context).accentColor,
+          elevation: 10,
+          type: MaterialType.card,
           child: Stack(
             fit: StackFit.expand,
             children: [

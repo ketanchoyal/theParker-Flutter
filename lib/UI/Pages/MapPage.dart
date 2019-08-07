@@ -1,12 +1,9 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
-import 'package:the_parker/UI/Widgets/search_map_place.dart';
 import 'package:the_parker/UI/utils/page_transformer.dart';
 
 class MapPage extends StatefulWidget {
@@ -239,10 +236,14 @@ class MapPageState extends State<MapPage> {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 65),
         child: FloatingActionButton(
+          backgroundColor: Theme.of(context).canvasColor,
           onPressed: () async {
             await _gotoMyLocation();
           },
-          child: Icon(Icons.location_searching),
+          child: Icon(
+            Icons.location_searching,
+            color: Theme.of(context).textTheme.body1.color
+          ),
         ),
       ),
     );
@@ -275,48 +276,6 @@ class MapPageState extends State<MapPage> {
               );
             },
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget _builtSearchBar() {
-    return Positioned(
-      left: 10,
-      right: 10,
-      top: 10,
-      child: SafeArea(
-        child: SearchMapPlaceWidget(
-          apiKey: APIKeys.google_map_key,
-          language: 'en',
-          // location: LatLng(location.latitude, location.longitude),
-          // radius: 100,
-          onSelected: (Place place) async {
-            print(place.fullJSON.toString());
-            place.geolocation.then((onValue) {
-              print(onValue.coordinates.toString());
-            });
-            // final geolocation = await place.geolocation;
-
-            // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
-            // final GoogleMapController controller =
-            //     await _controller.future;
-            // controller.animateCamera(
-            //     CameraUpdate.newLatLng(geolocation.coordinates));
-            // controller.animateCamera(
-            //     CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
-          },
-          onSearch: (Place place) async {
-            print(place.description);
-            final geolocation = await place.geolocation;
-
-            // Will animate the GoogleMap camera, taking us to the selected position with an appropriate zoom
-            final GoogleMapController controller = await _controller.future;
-            controller
-                .animateCamera(CameraUpdate.newLatLng(geolocation.coordinates));
-            controller.animateCamera(
-                CameraUpdate.newLatLngBounds(geolocation.bounds, 0));
-          },
         ),
       ),
     );

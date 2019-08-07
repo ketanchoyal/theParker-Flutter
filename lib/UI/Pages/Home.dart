@@ -1,7 +1,9 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
+import 'package:the_parker/UI/Widgets/Place%20Picker/place_picker.dart';
 import 'MapPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,7 +13,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,11 +20,19 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           MapPage(),
           CustomNavigationBar(
-            onTap: (value) => print(value.toString()),
+            onTap: (value) => showPlacePicker(),
           ),
         ],
       ),
     );
+  }
+
+  void showPlacePicker() async {
+    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => PlacePicker(APIKeys.google_map_key)));
+
+    // Handle the result in your way
+    print("Data" + result.toString());
   }
 }
 
@@ -81,13 +90,13 @@ class CustomNavigationBar extends StatelessWidget {
                               Icon(
                                 EvaIcons.menuArrow,
                                 size: 30,
-                                color: Theme.of(context).primaryColor,
+                                // color: Theme.of(context).primaryColor,
                               ),
                               Text(
                                 'More',
                                 style: ktitleStyle.copyWith(
                                   fontSize: 13,
-                                  color: Theme.of(context).primaryColor,
+                                  // color: Theme.of(context).primaryColor,
                                 ),
                               )
                             ],
@@ -119,13 +128,13 @@ class CustomNavigationBar extends StatelessWidget {
                               Icon(
                                 EvaIcons.search,
                                 size: 30,
-                                color: Theme.of(context).primaryColor,
+                                // color: Theme.of(context).primaryColor,
                               ),
                               Text(
                                 'Search',
                                 style: ktitleStyle.copyWith(
                                   fontSize: 13,
-                                  color: Theme.of(context).primaryColor,
+                                  // color: Theme.of(context).primaryColor,
                                 ),
                               )
                             ],
@@ -145,6 +154,7 @@ class CustomNavigationBar extends StatelessWidget {
                   height: 50,
                   width: 50,
                   child: FloatingActionButton(
+                    backgroundColor: Theme.of(context).textTheme.body1.color,
                     heroTag: 'adaojd',
                     // shape: RoundedRectangleBorder(),
                     // highlightElevation: 0,
@@ -152,7 +162,10 @@ class CustomNavigationBar extends StatelessWidget {
                     onPressed: () {
                       onTap(1);
                     },
-                    child: Icon(Icons.view_column),
+                    child: Icon(
+                      Icons.view_column,
+                      color: Theme.of(context).canvasColor,
+                    ),
                   ),
                 ),
               ),
