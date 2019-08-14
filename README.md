@@ -2,11 +2,13 @@
 
 ### Theparker is first open source(Flutter) shared parking app! (after my last theParker open source iOS App)
 
+### I'll be using Provider + Get_it for State Management.
+
+## MVVM(Model-View-(View)Model) Architecture.
+
 Theparker is the app build for iOS and Android using Flutter.
 
 It uses Firebase FireStore as Database and Firebase Storage.(Currently I'm planning to use static payment, no payment gateway will be added added anytime soon)  
-
-### I'll be using Provider + Get_it Architecture.
 
 ## FeatureS:
 
