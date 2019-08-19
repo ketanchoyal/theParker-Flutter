@@ -124,55 +124,52 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(
                     height: 15,
                   ),
-                  Hero(
-                    tag: 'otpForget',
-                    child: Container(
-                      height: 50,
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          ReusableRoundedButton(
-                            child: Text(
-                              notYetRegisteringText,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                if (buttonType == ButtonType.LOGIN) {
-                                  buttonType = ButtonType.REGISTER;
-                                } else {
-                                  buttonType = ButtonType.LOGIN;
-                                }
-                                isRegistered = !isRegistered;
-                                notYetRegisteringText = isRegistered
-                                    ? Kstrings.registered
-                                    : Kstrings.not_registered;
-                              });
-                            },
-                            height: 40,
+                  // Hero(
+                  // tag: 'otpForget',
+                  // child:
+                  Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        FloatingActionButton.extended(
+                          heroTag: 'sfhic',
+                          label: Text(
+                            notYetRegisteringText,
+                            style: ktitleStyle,
                           ),
-                          ReusableRoundedButton(
-                            child: Text(
-                              Kstrings.need_help,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
-                            ),
-                            onPressed: () {
-                              //Forget Password Logic
-                              kopenPage(context, ForgotPasswordPage());
-                            },
-                            height: 40,
+                          onPressed: () {
+                            setState(() {
+                              if (buttonType == ButtonType.LOGIN) {
+                                buttonType = ButtonType.REGISTER;
+                              } else {
+                                buttonType = ButtonType.LOGIN;
+                              }
+                              isRegistered = !isRegistered;
+                              notYetRegisteringText = isRegistered
+                                  ? Kstrings.registered
+                                  : Kstrings.not_registered;
+                            });
+                          },
+                          // height: 40,
+                        ),
+                        FloatingActionButton.extended(
+                          heroTag: 'needHelp',
+                          label: Text(
+                            Kstrings.need_help,
+                            style: ktitleStyle,
                           ),
-                        ],
-                      ),
+                          onPressed: () {
+                            //Forget Password Logic
+                            kopenPage(context, ForgotPasswordPage());
+                          },
+                          // height: 40,
+                        ),
+                      ],
                     ),
                   ),
+                  // ),
                   SizedBox(
                     height: 250,
                   ),

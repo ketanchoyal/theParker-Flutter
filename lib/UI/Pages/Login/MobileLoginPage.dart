@@ -101,20 +101,19 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                     SizedBox(
                       height: 15,
                     ),
-                    Hero(
-                      tag: 'otpForget',
-                      child: Container(
+                    // Hero(
+                    //   tag: 'otpForget',
+                    //   child: 
+                      Container(
                         height: 50,
                         width: MediaQuery.of(context).size.width,
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: ReusableRoundedButton(
-                            child: Text(
+                          child: FloatingActionButton.extended(
+                            heroTag: 'needHelp',
+                            label: Text(
                               Kstrings.send_otp,
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                              ),
+                              style: ktitleStyle,
                             ),
                             // text: "Forgot Pass?",
                             onPressed: () {
@@ -122,11 +121,11 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                                 isEnabled = !isEnabled;
                               });
                             },
-                            height: 40,
+                            // height: 40,
                           ),
                         ),
                       ),
-                    ),
+                    // ),
                     SizedBox(
                       height: 100,
                     ),

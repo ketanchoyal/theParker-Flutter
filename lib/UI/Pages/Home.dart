@@ -1,9 +1,18 @@
+import 'dart:math';
+
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/Place%20Picker/place_picker.dart';
+import 'package:the_parker/UI/Widgets/BottomNavigation.dart';
+import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
+import 'package:the_parker/UI/Widgets/PlacePicker/place_picker.dart';
+import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
+import 'package:the_parker/UI/Widgets/ease_in_widget.dart';
+import 'package:the_parker/UI/utils/page_transformer.dart';
 import 'MapPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,164 +21,184 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  bool showParallex = false;
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  AnimationController animationControllerProfile;
+  var offsetProfile = 0.0;
+  get currentProfilePercent => max(0.0, min(1.0, offsetProfile / (347 - 68.0)));
+  bool isProfileOpen = false;
+
+  CurvedAnimation curve;
+  Animation<double> animation;
+
+  void onSearchVerticalDragUpdate(details) {
+    if (showParallex) {
+      showParallex = false;
+    }
+    print("Offset : " + offsetProfile.toString());
+    print("Offset Height : " +
+        ((MediaQuery.of(context).size.height) * 0.75).toString());
+    offsetProfile += details.delta.dy;
+    if (offsetProfile > (MediaQuery.of(context).size.height) * 0.75) {
+      offsetProfile = (MediaQuery.of(context).size.height) * 0.75;
+    } else if (offsetProfile < 0) {
+      offsetProfile = 0;
+    }
+    setState(() {});
+  }
+
+  void animateProfile(bool open) {
+    animationControllerProfile = AnimationController(
+        duration: Duration(
+            milliseconds: 1 +
+                (800 *
+                        (isProfileOpen
+                            ? currentProfilePercent
+                            : (1 - currentProfilePercent)))
+                    .toInt()),
+        vsync: this);
+    curve =
+        CurvedAnimation(parent: animationControllerProfile, curve: Curves.ease);
+    animation = Tween(
+            begin: offsetProfile,
+            end: open ? (MediaQuery.of(context).size.height) * 0.4 : 0.0)
+        .animate(curve)
+          ..addListener(() {
+            setState(() {
+              offsetProfile = animation.value;
+            });
+          })
+          ..addStatusListener((status) {
+            if (status == AnimationStatus.completed) {
+              isProfileOpen = open;
+            }
+          });
+    animationControllerProfile.forward();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: scaffoldKey,
+      drawer: Stack(
+        children: <Widget>[
+          Positioned(
+            bottom: 0,
+            left: 0,
+            // right: 0,
+            child: Container(
+              color: Colors.red,
+              width: MediaQuery.of(context).size.width * 0.80,
+              height: MediaQuery.of(context).size.width * 0.80,
+            ),
+          ),
+        ],
+      ),
       body: Stack(
         children: <Widget>[
           MapPage(),
-          CustomNavigationBar(
-            onTap: (value) => showPlacePicker(),
+          showParallex ? _buildParallexCards() : Container(),
+          CustomBottomNavigationBar(
+            onTap: (value) => {
+              if (value == 0)
+                {scaffoldKey.currentState.openDrawer()}
+              else if (value == 1)
+                {showCards()}
+              else
+                {showPlacePicker(context)}
+            },
+          ),
+          ProfilePage(
+            currentSearchPercent: currentProfilePercent,
+          ),
+          ProfileWidget(
+            currentProfilePercent: currentProfilePercent,
+            isProfileOpen: isProfileOpen,
+            animateProfile: animateProfile,
+            onVerticalDragUpdate: onSearchVerticalDragUpdate,
+            onPanDown: () => animationControllerProfile?.stop(),
           ),
         ],
       ),
     );
   }
 
-  void showPlacePicker() async {
+  showCards() {
+    animateProfile(false);
+    showParallex = !showParallex;
+    setState(() {});
+  }
+
+  final parallaxCardItemsList = <ParallaxCardItem>[
+    ParallaxCardItem(
+      title: 'Overexposed',
+      body: 'Maroon 5',
+      marker: Marker(
+          markerId: MarkerId('nswtdkaslnnad'),
+          position: LatLng(19.017573, 72.856276)),
+    ),
+    ParallaxCardItem(
+      title: 'Blurryface',
+      body: 'Twenty One Pilots',
+      marker: Marker(
+          markerId: MarkerId('nsdkasnnad'),
+          position: LatLng(19.017573, 72.856276)),
+    ),
+    ParallaxCardItem(
+      title: 'Free Spirit',
+      body: 'Khalid',
+      marker: Marker(
+          markerId: MarkerId('nsdkasnndswad'),
+          position: LatLng(19.077573, 72.856276)),
+    ),
+  ];
+
+  void showPlacePicker(BuildContext context) async {
     LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => PlacePicker(APIKeys.google_map_key)));
+
+    // var result =
+    //     await LocationPicker.pickLocation(context, APIKeys.google_map_key);
 
     // Handle the result in your way
     print("Data" + result.toString());
   }
-}
-
-class CustomNavigationBar extends StatelessWidget {
-  const CustomNavigationBar({Key key, this.onTap}) : super(key: key);
-
-  final Function(int) onTap;
 
   @override
-  Widget build(BuildContext context) {
+  void dispose() {
+    super.dispose();
+
+    animationControllerProfile?.dispose();
+  }
+
+  Widget _buildParallexCards() {
     return Positioned(
-      bottom: 10,
-      left: 15,
-      right: 15,
-      child: Card(
-        color: Colors.transparent,
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
-          ),
-        ),
-        child: SizedBox(
-          height: 80,
-          child: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Container(
-                  padding: EdgeInsets.only(left: 10, right: 10),
-                  height: 55,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      bottomRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Expanded(
-                        child: FlatButton(
-                          padding: EdgeInsets.only(right: 35),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                EvaIcons.menuArrow,
-                                size: 30,
-                                // color: Theme.of(context).primaryColor,
-                              ),
-                              Text(
-                                'More',
-                                style: ktitleStyle.copyWith(
-                                  fontSize: 13,
-                                  // color: Theme.of(context).primaryColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          onPressed: () {
-                            onTap(0);
-                          },
-                        ),
-                      ),
-                      // Expanded(
-                      //   child: FlatButton(
-                      //     padding: EdgeInsets.only(top: 15),
-                      //     child: Icon(EvaIcons.arrowheadDown),
-                      //     onPressed: () {},
-                      //   ),
-                      // ),
-                      Expanded(
-                        child: FlatButton(
-                          padding: EdgeInsets.only(left: 35),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomRight: Radius.circular(20),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                EvaIcons.search,
-                                size: 30,
-                                // color: Theme.of(context).primaryColor,
-                              ),
-                              Text(
-                                'Search',
-                                style: ktitleStyle.copyWith(
-                                  fontSize: 13,
-                                  // color: Theme.of(context).primaryColor,
-                                ),
-                              )
-                            ],
-                          ),
-                          onPressed: () {
-                            onTap(2);
-                          },
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: FloatingActionButton(
-                    backgroundColor: Theme.of(context).textTheme.body1.color,
-                    heroTag: 'adaojd',
-                    // shape: RoundedRectangleBorder(),
-                    // highlightElevation: 0,
-                    elevation: 0,
-                    onPressed: () {
-                      onTap(1);
-                    },
-                    child: Icon(
-                      Icons.view_column,
-                      color: Theme.of(context).canvasColor,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+      bottom: 50,
+      left: 0,
+      right: 0,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 30.0),
+        child: SizedBox.fromSize(
+          size: Size.fromHeight(200.0),
+          child: PageTransformer(
+            pageViewBuilder: (context, visibilityResolver) {
+              return PageView.builder(
+                controller: PageController(viewportFraction: 0.85),
+                itemCount: parallaxCardItemsList.length,
+                itemBuilder: (context, index) {
+                  final item = parallaxCardItemsList[index];
+                  final pageVisibility =
+                      visibilityResolver.resolvePageVisibility(index);
+
+                  return ParallaxCardsWidget(
+                    item: item,
+                    pageVisibility: pageVisibility,
+                  );
+                },
+              );
+            },
           ),
         ),
       ),

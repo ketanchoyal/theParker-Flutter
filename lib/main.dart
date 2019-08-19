@@ -7,25 +7,61 @@ void main() {
   Provider.debugCheckInvalidValueType = null;
   runApp(MyApp());
 }
-
 // TODO: https://www.developerlibs.com/2018/08/flutter-how-can-draw-route-on-google.html?m=1 (Link for Distance and Direction)
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool darkMode = false;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'theParker',
-      theme: ThemeData(
-          fontFamily: 'K2D',
-          pageTransitionsTheme: PageTransitionsTheme(builders: {
-            TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-            TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-          }),
-          primaryColor: Kcolors.primary,
-          primaryColorDark: Kcolors.primaryDark,
-          primarySwatch: Colors.red,
-          // brightness: Brightness.dark,
-          accentColor: Kcolors.accent),
+      theme: darkMode
+          ? ThemeData(
+              fontFamily: 'K2D',
+              pageTransitionsTheme: PageTransitionsTheme(builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              }),
+              // primaryColor: Kcolors.primary,
+              // primaryColorDark: Kcolors.primaryDark,
+              // primarySwatch: Colors.deepOrange,
+              
+              brightness: Brightness.dark,
+              accentColor: Colors.black,
+              canvasColor: Colors.black,
+            )
+          : ThemeData(
+              fontFamily: 'K2D',
+              pageTransitionsTheme: PageTransitionsTheme(builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              }),
+              // primaryColor: Kcolors.primary,
+              // primaryColorDark: Kcolors.primaryDark,
+              // primarySwatch: Colors.deepOrange,
+              primaryColor: Colors.white,
+              brightness: Brightness.light,
+              accentColor: Colors.white,
+            ),
+      // darkTheme: ThemeData(
+      //   fontFamily: 'K2D',
+      //   pageTransitionsTheme: PageTransitionsTheme(builders: {
+      //     TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+      //     TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      //   }),
+      //   primaryColor: Kcolors.primary,
+      //   // primaryColorDark: Kcolors.primaryDark,
+      //   // primarySwatch: Colors.deepOrange,
+      //   brightness: Brightness.dark,
+      //   accentColor: Colors.black,
+      //   canvasColor: Colors.black,
+      // ),
       home: WelcomeScreen(),
     );
   }

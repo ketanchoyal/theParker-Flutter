@@ -3,7 +3,8 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.2.2 <3.0.0"
+  # sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
   flutter:
@@ -18,6 +19,7 @@ dependencies:
   equatable: ^0.3.0
   http: ^0.12.0+2
   # place_picker: ^0.9.9
+  # google_map_location_picker: ^1.0.5+2
 
 dev_dependencies:
   flutter_test:

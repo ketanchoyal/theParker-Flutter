@@ -173,30 +173,6 @@ class MapPageState extends State<MapPage> {
     });
   }
 
-  final parallaxCardItemsList = <ParallaxCardItem>[
-    ParallaxCardItem(
-      title: 'Overexposed',
-      body: 'Maroon 5',
-      marker: Marker(
-          markerId: MarkerId('nswtdkaslnnad'),
-          position: LatLng(19.017573, 72.856276)),
-    ),
-    ParallaxCardItem(
-      title: 'Blurryface',
-      body: 'Twenty One Pilots',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnnad'),
-          position: LatLng(19.017573, 72.856276)),
-    ),
-    ParallaxCardItem(
-      title: 'Free Spirit',
-      body: 'Khalid',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnndswad'),
-          position: LatLng(19.077573, 72.856276)),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -228,7 +204,7 @@ class MapPageState extends State<MapPage> {
                   },
                   // markers: Set<Marker>.of(markers.values),
                 ),
-                _buildParallexCards()
+
                 // _builtSearchBar(),
               ],
             );
@@ -240,42 +216,8 @@ class MapPageState extends State<MapPage> {
           onPressed: () async {
             await _gotoMyLocation();
           },
-          child: Icon(
-            Icons.location_searching,
-            color: Theme.of(context).textTheme.body1.color
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildParallexCards() {
-    return Positioned(
-      bottom: 50,
-      left: 0,
-      right: 0,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 30.0),
-        child: SizedBox.fromSize(
-          size: Size.fromHeight(200.0),
-          child: PageTransformer(
-            pageViewBuilder: (context, visibilityResolver) {
-              return PageView.builder(
-                controller: PageController(viewportFraction: 0.85),
-                itemCount: parallaxCardItemsList.length,
-                itemBuilder: (context, index) {
-                  final item = parallaxCardItemsList[index];
-                  final pageVisibility =
-                      visibilityResolver.resolvePageVisibility(index);
-
-                  return ParallaxCardsWidget(
-                    item: item,
-                    pageVisibility: pageVisibility,
-                  );
-                },
-              );
-            },
-          ),
+          child: Icon(Icons.location_searching,
+              color: Theme.of(context).textTheme.body1.color),
         ),
       ),
     );
