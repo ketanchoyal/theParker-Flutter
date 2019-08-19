@@ -22,7 +22,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  bool showParallex = false;
+  bool closeCards = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   AnimationController animationControllerProfile;
@@ -34,8 +34,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Animation<double> animation;
 
   void onSearchVerticalDragUpdate(details) {
-    if (showParallex) {
-      showParallex = false;
+    if (closeCards) {
+      closeCards = false;
     }
     print("Offset : " + offsetProfile.toString());
     print("Offset Height : " +
@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       body: Stack(
         children: <Widget>[
           MapPage(),
-          showParallex ? _buildParallexCards() : Container(),
-          CustomBottomNavigationBar(
+          CustomBottomNavigationBarAnimated(
+            closeCards: true,
             onTap: (value) => {
               if (value == 0)
                 {scaffoldKey.currentState.openDrawer()}
@@ -127,33 +127,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   showCards() {
     animateProfile(false);
-    showParallex = !showParallex;
     setState(() {});
   }
-
-  final parallaxCardItemsList = <ParallaxCardItem>[
-    ParallaxCardItem(
-      title: 'Overexposed',
-      body: 'Maroon 5',
-      marker: Marker(
-          markerId: MarkerId('nswtdkaslnnad'),
-          position: LatLng(19.017573, 72.856276)),
-    ),
-    ParallaxCardItem(
-      title: 'Blurryface',
-      body: 'Twenty One Pilots',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnnad'),
-          position: LatLng(19.017573, 72.856276)),
-    ),
-    ParallaxCardItem(
-      title: 'Free Spirit',
-      body: 'Khalid',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnndswad'),
-          position: LatLng(19.077573, 72.856276)),
-    ),
-  ];
 
   void showPlacePicker(BuildContext context) async {
     LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
@@ -171,37 +146,5 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.dispose();
 
     animationControllerProfile?.dispose();
-  }
-
-  Widget _buildParallexCards() {
-    return Positioned(
-      bottom: 50,
-      left: 0,
-      right: 0,
-      child: Padding(
-        padding: EdgeInsets.only(bottom: 30.0),
-        child: SizedBox.fromSize(
-          size: Size.fromHeight(200.0),
-          child: PageTransformer(
-            pageViewBuilder: (context, visibilityResolver) {
-              return PageView.builder(
-                controller: PageController(viewportFraction: 0.85),
-                itemCount: parallaxCardItemsList.length,
-                itemBuilder: (context, index) {
-                  final item = parallaxCardItemsList[index];
-                  final pageVisibility =
-                      visibilityResolver.resolvePageVisibility(index);
-
-                  return ParallaxCardsWidget(
-                    item: item,
-                    pageVisibility: pageVisibility,
-                  );
-                },
-              );
-            },
-          ),
-        ),
-      ),
-    );
   }
 }
