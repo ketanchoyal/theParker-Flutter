@@ -11,11 +11,15 @@ class CustomBottomNavigationBarAnimated extends StatefulWidget {
   CustomBottomNavigationBarAnimated({
     Key key,
     this.onTap,
-    this.closeCards,
+    this.currentBottomBarPercent,
+    this.currentProfilePercentage,
+    // this.closeProfile,
   }) : super(key: key);
 
   final Function(int) onTap;
-  final bool closeCards;
+  // final Function(bool) closeProfile;
+  final Function(double) currentBottomBarPercent;
+  final double currentProfilePercentage;
 
   _CustomBottomNavigationBarAnimatedState createState() =>
       _CustomBottomNavigationBarAnimatedState();
@@ -25,9 +29,10 @@ class _CustomBottomNavigationBarAnimatedState
     extends State<CustomBottomNavigationBarAnimated>
     with TickerProviderStateMixin {
   AnimationController animationControllerBottomBar;
+
   var offsetBottomBar = 0.0;
   get currentBottomBarPercent =>
-      max(0.0, min(1.0, offsetBottomBar / (347 - 68.0)));
+      max(0.0, min(1.0, offsetBottomBar / (300 - 80.0)));
   bool isBottomBarOpen = false;
 
   CurvedAnimation curve;
@@ -40,6 +45,7 @@ class _CustomBottomNavigationBarAnimatedState
     } else if (offsetBottomBar < 0) {
       offsetBottomBar = 0;
     }
+    widget.currentBottomBarPercent(currentBottomBarPercent);
     setState(() {});
   }
 
@@ -47,6 +53,7 @@ class _CustomBottomNavigationBarAnimatedState
     if (isBottomBarOpen) {
       isBottomBarOpen = false;
     }
+
     animationControllerBottomBar = AnimationController(
         duration: Duration(
             milliseconds: 1 +
@@ -75,6 +82,11 @@ class _CustomBottomNavigationBarAnimatedState
 
   @override
   Widget build(BuildContext context) {
+    if (widget.currentProfilePercentage > 0.30) {
+      if (isBottomBarOpen) {
+        animateBottomBar(false);
+      }
+    }
     return CustomBottomNavigationBar(
       animateBottomBar: animateBottomBar,
       currentBottomBarPercentage: currentBottomBarPercent,

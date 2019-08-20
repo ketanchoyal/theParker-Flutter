@@ -1,13 +1,9 @@
 import 'dart:math';
-
-import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/BottomNavigation.dart';
+import 'package:the_parker/UI/Widgets/AnimatedBottomNavigation.dart';
 import 'package:the_parker/UI/Widgets/PlacePicker/place_picker.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
 import 'MapPage.dart';
@@ -19,6 +15,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  bool isBottomBarOpen = false;
   bool closeCards = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -29,15 +26,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       0.0,
       min(1.0,
           offsetProfile / (MediaQuery.of(context).size.height * 0.75 - 90.0)));
+
+  double profilePercentage = 0.0;
   bool isProfileOpen = false;
 
   CurvedAnimation curve;
   Animation<double> animation;
 
   void onSearchVerticalDragUpdate(details) {
-    if (closeCards) {
-      closeCards = false;
-    }
+    closeCards = isBottomBarOpen;
     print("Offset : " + offsetProfile.toString());
     print("Offset Height : " +
         ((MediaQuery.of(context).size.height) * 0.75).toString());
@@ -102,7 +99,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: <Widget>[
           MapPage(),
           CustomBottomNavigationBarAnimated(
-            closeCards: true,
+            currentBottomBarPercent: (currentBottomBarPercent) {
+              if (currentBottomBarPercent > 0.25) {
+                if (isProfileOpen) {
+                  animateProfile(false);
+                }
+              }
+            },
+            
+            currentProfilePercentage: currentProfilePercent,
             onTap: (value) => {
               if (value == 0)
                 {scaffoldKey.currentState.openDrawer()}
