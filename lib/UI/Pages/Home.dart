@@ -81,20 +81,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      drawer: Stack(
-        children: <Widget>[
-          Positioned(
-            bottom: 0,
-            left: 0,
-            // right: 0,
-            child: Container(
-              color: Colors.red,
-              width: MediaQuery.of(context).size.width * 0.80,
-              height: MediaQuery.of(context).size.width * 0.80,
-            ),
-          ),
-        ],
-      ),
+      // drawer: Stack(
+      //   children: <Widget>[
+      //     Positioned(
+      //       bottom: 0,
+      //       left: 0,
+      //       // right: 0,
+      //       child: Container(
+      //         color: Colors.red,
+      //         width: MediaQuery.of(context).size.width * 0.80,
+      //         height: MediaQuery.of(context).size.width * 0.80,
+      //       ),
+      //     ),
+      //   ],
+      // ),
       body: Stack(
         children: <Widget>[
           MapPage(),
@@ -106,11 +106,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 }
               }
             },
-            
             currentProfilePercentage: currentProfilePercent,
             onTap: (value) => {
               if (value == 0)
-                {scaffoldKey.currentState.openDrawer()}
+                {
+                  // scaffoldKey.currentState.openDrawer()
+                }
               else if (value == 1)
                 {showCards()}
               else
@@ -134,7 +135,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   showCards() {
     animateProfile(false);
-    setState(() {});
+    // setState(() {});
   }
 
   void showPlacePicker(BuildContext context) async {

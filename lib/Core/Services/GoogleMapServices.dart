@@ -4,9 +4,10 @@ import 'dart:convert';
 
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 
-const apiKey = APIKeys.google_map_key;
+
 
 class GoogleMapsServices {
+  var apiKey = APIKeys.google_map_key;
   Future<String> getRouteCoordinates(LatLng l1, LatLng l2) async {
     String url =
         "https://maps.googleapis.com/maps/api/directions/json?origin=${l1.latitude},${l1.longitude}&destination=${l2.latitude},${l2.longitude}&key=$apiKey";

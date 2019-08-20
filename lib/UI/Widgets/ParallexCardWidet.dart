@@ -1,9 +1,15 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
+import 'package:the_parker/UI/Widgets/StaticImagee/StaticImage.dart';
 import 'package:the_parker/UI/utils/page_transformer.dart';
+
+// enum MapStyle
+// {
+//   value="light-v10"Mapbox Light</option><option value="mapbox://styles/mapbox/dark-v10">Mapbox Dark</option><option value="mapbox://styles/mapbox/streets-v11">Mapbox Streets</option><option value="mapbox://styles/mapbox/outdoors-v11">Mapbox Outdoors</option><option value="mapbox://styles/mapbox/satellite-v9">Mapbox Satellite</option><option value="mapbox://styles/mapbox/satellite-streets-v11">Mapbox Satellite Streets</option></select>
+// }
 
 class ParallaxCardItem {
   ParallaxCardItem({this.title, this.body, this.marker, this.userPosition});
@@ -28,6 +34,9 @@ class ParallaxCardsWidget extends StatefulWidget {
 }
 
 class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
+  var staticMapProvider = StaticMapProvider(APIKeys.google_map_key);
+  String mapStaticImageUrl;
+
   final CameraPosition _initialCamera = CameraPosition(
     target: LatLng(0, 0),
     zoom: 4,
@@ -118,10 +127,18 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
     );
   }
 
+  String getImageUri({int zoom = 15}) {
+    mapStaticImageUrl =
+        "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/${widget.item.marker.position.longitude},${widget.item.marker.position.latitude},$zoom,0,20/600x400@2x?access_token=pk.eyJ1IjoicGFya2luZ3N5c3RlbSIsImEiOiJjanpqbW9oZ2owYW5zM2dwZWlyd3RuaHRwIn0.kTF1XSrSe23_N-72xCRV4w";
+    print(mapStaticImageUrl);
+    return mapStaticImageUrl;
+  }
+
   @override
   void initState() {
     super.initState();
     _initMarkerLocation();
+    // getImageUri();
   }
 
   @override
@@ -135,19 +152,33 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
     Map<MarkerId, Marker> markers = Map<MarkerId, Marker>();
     markers[widget.item.marker.markerId] = widget.item.marker;
 
-    var googleMap = GoogleMap(
-      mapType: MapType.normal,
-      compassEnabled: true,
-      myLocationEnabled: true,
-      myLocationButtonEnabled: false,
-      initialCameraPosition: _markerPosition ?? _initialCamera,
-      rotateGesturesEnabled: true,
-      onMapCreated: (GoogleMapController controller) {
-        _controller.complete(controller);
-      },
-      scrollGesturesEnabled: false,
-      zoomGesturesEnabled: false,
-      markers: Set<Marker>.of(markers.values),
+    // var googleMap = GoogleMap(
+    //   mapType: MapType.normal,
+    //   compassEnabled: true,
+    //   myLocationEnabled: true,
+    //   myLocationButtonEnabled: false,
+    //   initialCameraPosition: _markerPosition ?? _initialCamera,
+    //   rotateGesturesEnabled: true,
+    //   onMapCreated: (GoogleMapController controller) {
+    //     _controller.complete(controller);
+    //   },
+    //   scrollGesturesEnabled: false,
+    //   zoomGesturesEnabled: false,
+    //   markers: Set<Marker>.of(markers.values),
+    // );
+
+    var centerMarker = Align(
+      alignment: Alignment.center,
+      child: Icon(
+        Icons.location_on,
+        color: Colors.red,
+        size: 40,
+      ),
+    );
+
+    var googleMap = Image.network(
+      getImageUri(zoom: 15),
+      fit: BoxFit.cover,
     );
 
     var imageOverlayGradient = DecoratedBox(
@@ -183,6 +214,7 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
             fit: StackFit.expand,
             children: [
               googleMap,
+              centerMarker,
               imageOverlayGradient,
               _buildTextContainer(context),
             ],
