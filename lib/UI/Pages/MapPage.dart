@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
-import 'package:the_parker/UI/utils/page_transformer.dart';
 
 class MapPage extends StatefulWidget {
   @override

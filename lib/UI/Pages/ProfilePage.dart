@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Resources/Resources.dart';
 
 class ProfilePage extends StatelessWidget {
   final double currentSearchPercent;
 
-  const ProfilePage({Key key, this.currentSearchPercent})
-      : super(key: key);
+  const ProfilePage({Key key, this.currentSearchPercent}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +21,11 @@ class ProfilePage extends StatelessWidget {
                     5,
                 decoration: BoxDecoration(
                   color: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(30 * currentSearchPercent)),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(
+                      35 * currentSearchPercent,
+                    ),
+                  ),
                 ),
               ),
             ),

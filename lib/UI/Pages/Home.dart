@@ -8,11 +8,8 @@ import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/BottomNavigation.dart';
-import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
 import 'package:the_parker/UI/Widgets/PlacePicker/place_picker.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
-import 'package:the_parker/UI/Widgets/ease_in_widget.dart';
-import 'package:the_parker/UI/utils/page_transformer.dart';
 import 'MapPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -27,7 +24,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   AnimationController animationControllerProfile;
   var offsetProfile = 0.0;
-  get currentProfilePercent => max(0.0, min(1.0, offsetProfile / (347 - 68.0)));
+  // get currentProfilePercent => max(0.0, min(1.0, offsetProfile / (347 - 68.0)));
+  get currentProfilePercent => max(
+      0.0,
+      min(1.0,
+          offsetProfile / (MediaQuery.of(context).size.height * 0.75 - 90.0)));
   bool isProfileOpen = false;
 
   CurvedAnimation curve;
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     print("Offset : " + offsetProfile.toString());
     print("Offset Height : " +
         ((MediaQuery.of(context).size.height) * 0.75).toString());
+    print("Percentage : " + currentProfilePercent.toString());
     offsetProfile += details.delta.dy;
     if (offsetProfile > (MediaQuery.of(context).size.height) * 0.75) {
       offsetProfile = (MediaQuery.of(context).size.height) * 0.75;
@@ -63,7 +65,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         CurvedAnimation(parent: animationControllerProfile, curve: Curves.ease);
     animation = Tween(
             begin: offsetProfile,
-            end: open ? (MediaQuery.of(context).size.height) * 0.4 : 0.0)
+            end: open ? (MediaQuery.of(context).size.height) * 0.75 : 0.0)
         .animate(curve)
           ..addListener(() {
             setState(() {
