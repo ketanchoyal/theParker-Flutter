@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
@@ -31,15 +30,22 @@ class CustomBottomNavigationBarAnimated extends StatefulWidget {
     this.currentBottomBarParallexPercent,
     this.currentProfilePercentage,
     this.currentBottomBarMorePercent,
+    this.currentBottomBarSearchPercent,
     this.moreButtons,
+    this.searchWidget,
   })  : assert(moreButtons != null ? moreButtons.length <= 9 : true),
         super(key: key);
 
   final Function(int) onTap;
-  // final Function(bool) closeProfile;
   final Function(double) currentBottomBarParallexPercent;
   final Function(double) currentBottomBarMorePercent;
+  final Function(double) currentBottomBarSearchPercent;
   final double currentProfilePercentage;
+  final Widget searchWidget;
+
+  ///If you want Empty Space then put null.
+  ///Maximum 9 buttons can be added.
+  ///Buttons will be placed according to the list order.
   final List<MoreButtonModel> moreButtons;
 
   _CustomBottomNavigationBarAnimatedState createState() =>
@@ -83,6 +89,10 @@ class _CustomBottomNavigationBarAnimatedState
 
     if (isBottomBarMoreOpen) {
       animateBottomBarMore(!isBottomBarMoreOpen);
+    }
+
+    if (isBottomBarSearchOpen) {
+      animateBottomBarSearch(!isBottomBarSearchOpen);
     }
 
     animationControllerBottomBarParallex = AnimationController(
@@ -140,6 +150,9 @@ class _CustomBottomNavigationBarAnimatedState
   }
 
   void animateBottomBarMore(bool open) {
+    if (isBottomBarSearchOpen) {
+      animateBottomBarSearch(!isBottomBarSearchOpen);
+    }
     if (isBottomBarParallexOpen) {
       animateBottomBarParallex(!isBottomBarParallexOpen);
     }
@@ -176,6 +189,72 @@ class _CustomBottomNavigationBarAnimatedState
     animationControllerBottomBarMore.forward();
   }
 
+  //* Search Button Animation(bring center button downwards) */
+
+  AnimationController animationControllerBottomBarSearch;
+  var offsetBottomBarSearch = 0.0;
+  get currentBottomBarSearchPercentage => max(
+        0.0,
+        min(
+          1.0,
+          offsetBottomBarSearch / 28.0,
+        ),
+      );
+  bool isBottomBarSearchOpen = false;
+  Animation<double> animationSearch;
+
+  void onSearchVerticalDragUpdate(details) {
+    offsetBottomBarSearch -= details.delta.dy;
+    if (offsetBottomBarSearch > bottomBarExpandedHeight) {
+      offsetBottomBarSearch = bottomBarExpandedHeight;
+    } else if (offsetBottomBarSearch < 0) {
+      offsetBottomBarSearch = 0;
+    }
+    widget.currentBottomBarSearchPercent(currentBottomBarSearchPercentage);
+    setState(() {});
+  }
+
+  void animateBottomBarSearch(bool open) {
+    if (isBottomBarParallexOpen) {
+      animateBottomBarParallex(!isBottomBarParallexOpen);
+    }
+
+    if (isBottomBarMoreOpen) {
+      animateBottomBarMore(!isBottomBarMoreOpen);
+    }
+
+    animationControllerBottomBarSearch = AnimationController(
+        duration: Duration(
+            milliseconds: 1 +
+                (1000 *
+                        (isBottomBarSearchOpen
+                            ? currentBottomBarSearchPercentage
+                            : (1 - currentBottomBarSearchPercentage)))
+                    .toInt()),
+        vsync: this);
+    curve = CurvedAnimation(
+        parent: animationControllerBottomBarSearch, curve: Curves.ease);
+    animationSearch =
+        Tween(begin: offsetBottomBarSearch, end: open ? 28.0 : 0.0)
+            .animate(curve)
+              ..addListener(
+                () {
+                  setState(() {
+                    offsetBottomBarSearch = animationSearch.value;
+                  });
+                },
+              )
+              ..addStatusListener(
+                (status) {
+                  if (status == AnimationStatus.completed) {
+                    isBottomBarSearchOpen = open;
+                  }
+                },
+              );
+    animationControllerBottomBarSearch.forward();
+    widget.currentBottomBarSearchPercent(currentBottomBarSearchPercentage);
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.currentProfilePercentage > 0.30) {
@@ -188,6 +267,7 @@ class _CustomBottomNavigationBarAnimatedState
     }
     return CustomBottomNavigationBar(
       moreButtons: widget.moreButtons,
+      searchWidget: widget.searchWidget,
       //* "Parallex" Animation
       animateBottomBarParallex: animateBottomBarParallex,
       currentBottomBarParallexPercentage: currentBottomBarParallexPercentage,
@@ -201,6 +281,12 @@ class _CustomBottomNavigationBarAnimatedState
       isBottomBarMoreOpen: isBottomBarMoreOpen,
       onMoreVerticalDragUpdate: onMoreVerticalDragUpdate,
       onMorePanDown: () => animationControllerBottomBarMore?.stop(),
+      //* Search
+      animateBottomBarSearch: animateBottomBarSearch,
+      currentBottomBarSearchPercentage: currentBottomBarSearchPercentage,
+      isBottomBarSearchOpen: isBottomBarSearchOpen,
+      onSearchVerticalDragUpdate: onSearchVerticalDragUpdate,
+      onSearchPanDown: () => animationControllerBottomBarSearch?.stop(),
     );
   }
 
@@ -215,20 +301,31 @@ class CustomBottomNavigationBar extends StatelessWidget {
   CustomBottomNavigationBar({
     Key key,
     this.onTap,
+    this.searchWidget,
+    //Parallex
     this.animateBottomBarParallex,
     this.currentBottomBarParallexPercentage,
     this.isBottomBarParallexOpen,
     this.onParallexPanDown,
     this.onParallexVerticalDragUpdate,
+    //More
     this.animateBottomBarMore,
     this.currentBottomBarMorePercentage,
     this.isBottomBarMoreOpen,
     this.onMorePanDown,
     this.onMoreVerticalDragUpdate,
     this.moreButtons,
+    //Search
+    this.animateBottomBarSearch,
+    this.currentBottomBarSearchPercentage,
+    this.isBottomBarSearchOpen,
+    this.onSearchPanDown,
+    this.onSearchVerticalDragUpdate,
   }) : super(key: key);
 
   final Function(int) onTap;
+
+  final Widget searchWidget;
 
   final List<MoreButtonModel> moreButtons;
 
@@ -244,13 +341,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final Function(DragUpdateDetails) onMoreVerticalDragUpdate;
   final Function() onMorePanDown;
 
+  final double currentBottomBarSearchPercentage;
+  final Function(bool) animateBottomBarSearch;
+  final bool isBottomBarSearchOpen;
+  final Function(DragUpdateDetails) onSearchVerticalDragUpdate;
+  final Function() onSearchPanDown;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 10,
       left: 15,
       right: 15,
+      // alignment: Alignment.bottomCenter,
       child: Card(
+        // color: Colors.transparent,
         color: Colors.transparent,
         elevation: 10,
         shape: RoundedRectangleBorder(
@@ -265,20 +370,38 @@ class CustomBottomNavigationBar extends StatelessWidget {
               (bottomBarExpandedHeight - bottomBarOriginalHeight) *
                   currentBottomBarParallexPercentage +
               //* Increase height when More Button is expanded *//
-              (bottomBarExpandedHeight) * currentBottomBarMorePercentage,
+              (bottomBarExpandedHeight) * currentBottomBarMorePercentage +
+              //* Increase Height For Search Bar */
+              (350) * currentBottomBarSearchPercentage,
           child: Stack(
             children: <Widget>[
               _buildBackgroundForParallexCard(context),
-
-              isBottomBarParallexOpen ? _buildParallexCards() : Container(),
-
+              _builtSearchBar(),
               _buildOtherButtons(context),
+              isBottomBarParallexOpen
+                  ? _buildParallexCards(context)
+                  : Container(),
               _buildMoreExpandedCard(context),
-              // Container(color: Colors.blue,),
               _buildCenterButton(context),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _builtSearchBar() {
+    return Visibility(
+      // maintainAnimation: true,
+      // maintainInteractivity: false,
+      // maintainSize: false,
+      // maintainState: true,
+      visible: isBottomBarSearchOpen,
+      child: Positioned(
+        left: 50 - 50 * currentBottomBarSearchPercentage,
+        right: 50 - 50 * currentBottomBarSearchPercentage,
+        bottom: 0 + 55 * currentBottomBarSearchPercentage,
+        child: searchWidget ?? Container(),
       ),
     );
   }
@@ -403,35 +526,46 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return Expanded(
       child: Container(
         height: bottomBarVisibleHeight,
-        child: FloatingActionButton(
-          heroTag: 'sdansiux',
-          // padding: EdgeInsets.only(left: 35),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                EvaIcons.search,
-                size: 30,
-                // color: Theme.of(context).primaryColor,
+        child: GestureDetector(
+          onPanDown: (_) => onSearchPanDown,
+          onVerticalDragUpdate: onSearchVerticalDragUpdate,
+          onVerticalDragEnd: (_) {
+            _dispatchBottomBarSearchOffset();
+          },
+          onVerticalDragCancel: () {
+            _dispatchBottomBarSearchOffset();
+          },
+          child: FloatingActionButton(
+            heroTag: 'sdansiux',
+            // padding: EdgeInsets.only(left: 35),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                bottomRight: Radius.circular(20),
               ),
-              Text(
-                'Search',
-                style: ktitleStyle.copyWith(
-                  fontSize: 13,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  EvaIcons.search,
+                  size: 30,
                   // color: Theme.of(context).primaryColor,
                 ),
-              )
-            ],
+                Text(
+                  'Search',
+                  style: ktitleStyle.copyWith(
+                    fontSize: 13,
+                    // color: Theme.of(context).primaryColor,
+                  ),
+                )
+              ],
+            ),
+            onPressed: () {
+              onTap(2);
+              animateBottomBarSearch(!isBottomBarSearchOpen);
+            },
           ),
-          onPressed: () {
-            onTap(2);
-          },
         ),
       ),
     );
@@ -522,41 +656,63 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   Widget _buildCenterButton(BuildContext context) {
     return Positioned(
-      left: 0,
-      right: 0,
+      left: currentBottomBarParallexPercentage > 0.0
+          ? 0
+          : (MediaQuery.of(context).size.width / 2) - 50,
+      right: currentBottomBarParallexPercentage > 0.0
+          ? 0
+          : (MediaQuery.of(context).size.width / 2) - 50,
+      // top: 0 +
+      //     (28 + bottomBarExpandedHeight) * currentBottomBarMorePercentage +
+      //     (28 + 350) * currentBottomBarSearchPercentage,
       bottom: 30 +
           (bottomBarExpandedHeight - bottomBarOriginalHeight) *
               currentBottomBarParallexPercentage -
-          25 * currentBottomBarMorePercentage,
+          28 * currentBottomBarMorePercentage -
+          28 * currentBottomBarSearchPercentage,
       // alignment: Alignment.topCenter,
-      child: SizedBox(
+      child: Container(
         height: 50,
-        width: 50,
-        child: EaseInWidget(
-          onTap: () {
-            onTap(1);
-            animateBottomBarParallex(!isBottomBarParallexOpen);
-          },
-          child: GestureDetector(
-            onPanDown: (_) => onParallexPanDown,
-            onVerticalDragUpdate: onParallexVerticalDragUpdate,
-            onVerticalDragEnd: (_) {
-              _dispatchBottomBarParallexOffset();
-            },
-            onVerticalDragCancel: () {
-              _dispatchBottomBarParallexOffset();
-            },
-            child: FloatingActionButton(
-              backgroundColor: Theme.of(context).textTheme.body1.color,
-              heroTag: 'adaojd',
-              elevation: 0,
-              onPressed: null,
-              child: Icon(
-                Icons.view_column,
-                color: Theme.of(context).canvasColor,
+        // color: Colors.red,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              height: 50,
+              width: 50,
+              child: EaseInWidget(
+                onTap: null,
+                child: GestureDetector(
+                  onPanDown: (_) => onParallexPanDown,
+                  onVerticalDragUpdate: onParallexVerticalDragUpdate,
+                  onVerticalDragEnd: (_) {
+                    _dispatchBottomBarParallexOffset();
+                  },
+                  onVerticalDragCancel: () {
+                    _dispatchBottomBarParallexOffset();
+                  },
+                  child: FloatingActionButton(
+                    backgroundColor: Theme.of(context).textTheme.body1.color,
+                    heroTag: 'adaojd',
+                    elevation: 0,
+                    onPressed: () {
+                      onTap(1);
+                      animateBottomBarParallex(!isBottomBarParallexOpen);
+                    },
+                    child: Icon(
+                      Icons.view_column,
+                      color: Theme.of(context).canvasColor,
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
+            // SizedBox(
+            //   height: 300 * currentBottomBarParallexPercentage,
+            //   // child: Container(
+            //   //   color: Colors.red,
+            //   // ),
+            // )
+          ],
         ),
       ),
     );
@@ -586,32 +742,36 @@ class CustomBottomNavigationBar extends StatelessWidget {
     ),
   ];
 
-  Widget _buildParallexCards() {
+  Widget _buildParallexCards(BuildContext context) {
     return Positioned(
-      bottom: 35 * currentBottomBarParallexPercentage,
+      bottom: 30 * currentBottomBarParallexPercentage,
       left: 0,
       right: 0,
-      child: Padding(
-        padding:
-            EdgeInsets.only(bottom: 30.0 * currentBottomBarParallexPercentage),
-        child: SizedBox.fromSize(
-          size: Size.fromHeight(200.0 * currentBottomBarParallexPercentage),
-          child: PageTransformer(
-            pageViewBuilder: (context, visibilityResolver) {
-              return PageView.builder(
-                controller: PageController(viewportFraction: 0.85),
-                itemCount: parallaxCardItemsList.length,
-                itemBuilder: (context, index) {
-                  final item = parallaxCardItemsList[index];
-                  final pageVisibility =
-                      visibilityResolver.resolvePageVisibility(index);
-                  return ParallaxCardsWidget(
-                    item: item,
-                    pageVisibility: pageVisibility,
-                  );
-                },
-              );
-            },
+      child: Container(
+        height: (bottomBarExpandedHeight - bottomBarVisibleHeight - 10) *
+            currentBottomBarParallexPercentage,
+        child: Padding(
+          padding: EdgeInsets.only(
+              bottom: 30.0 * currentBottomBarParallexPercentage),
+          child: SizedBox.fromSize(
+            size: Size.fromHeight(200.0 * currentBottomBarParallexPercentage),
+            child: PageTransformer(
+              pageViewBuilder: (context, visibilityResolver) {
+                return PageView.builder(
+                  controller: PageController(viewportFraction: 0.85),
+                  itemCount: parallaxCardItemsList.length,
+                  itemBuilder: (context, index) {
+                    final item = parallaxCardItemsList[index];
+                    final pageVisibility =
+                        visibilityResolver.resolvePageVisibility(index);
+                    return ParallaxCardsWidget(
+                      item: item,
+                      pageVisibility: pageVisibility,
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -646,6 +806,22 @@ class CustomBottomNavigationBar extends StatelessWidget {
         animateBottomBarMore(true);
       } else {
         animateBottomBarMore(false);
+      }
+    }
+  }
+
+  void _dispatchBottomBarSearchOffset() {
+    if (!isBottomBarSearchOpen) {
+      if (currentBottomBarSearchPercentage < 0.2) {
+        animateBottomBarSearch(false);
+      } else {
+        animateBottomBarSearch(true);
+      }
+    } else {
+      if (currentBottomBarSearchPercentage > 0.6) {
+        animateBottomBarSearch(true);
+      } else {
+        animateBottomBarSearch(false);
       }
     }
   }

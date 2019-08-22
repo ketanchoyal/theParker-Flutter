@@ -3,10 +3,10 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:search_map_place/search_map_place.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Widgets/AnimatedBottomNavigation.dart';
-import 'package:the_parker/UI/Widgets/PlacePicker/place_picker.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
 import 'MapPage.dart';
 
@@ -19,7 +19,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   bool isBottomBarOpen = false;
   bool closeCards = false;
+  bool searchBarVisible = false;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  double currentBottomBarSearchPercent = 0.0;
 
   AnimationController animationControllerProfile;
   var offsetProfile = 0.0;
@@ -83,24 +85,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      // drawer: Stack(
-      //   children: <Widget>[
-      //     Positioned(
-      //       bottom: 0,
-      //       left: 0,
-      //       // right: 0,
-      //       child: Container(
-      //         color: Colors.red,
-      //         width: MediaQuery.of(context).size.width * 0.80,
-      //         height: MediaQuery.of(context).size.width * 0.80,
-      //       ),
-      //     ),
-      //   ],
-      // ),
       body: Stack(
         children: <Widget>[
           MapPage(),
+          // _builtSearchBar(),
           CustomBottomNavigationBarAnimated(
+            searchWidget: builtSearchBar(),
             currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
               print("Parallex Percentage : " +
                   currentBottomBarParallexPercent.toString());
@@ -119,6 +109,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 }
               }
             },
+            currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {
+              this.currentBottomBarSearchPercent =
+                  currentBottomBarSearchPercent;
+              print('Search Percentage : ' +
+                  currentBottomBarSearchPercent.toString());
+
+              if (currentBottomBarSearchPercent == 0.0) {
+                searchBarVisible = false;
+              } else {
+                searchBarVisible = true;
+              }
+              setState(() {});
+            },
             currentProfilePercentage: currentProfilePercent,
             onTap: (value) => {
               if (value == 0)
@@ -126,7 +129,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               else if (value == 1)
                 {hideProfile()}
               else
-                {showPlacePicker(context)}
+                {
+                  enableDisableSearchBar()
+                  // showPlacePicker(context)
+                }
             },
             moreButtons: [
               MoreButtonModel(
@@ -190,15 +196,35 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     // setState(() {});
   }
 
-  void showPlacePicker(BuildContext context) async {
-    LocationResult result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => PlacePicker(APIKeys.google_map_key)));
+  enableDisableSearchBar() {
+    setState(() {
+      searchBarVisible = !searchBarVisible;
+    });
+  }
 
-    // var result =
-    //     await LocationPicker.pickLocation(context, APIKeys.google_map_key);
-
-    // Handle the result in your way
-    print("Data" + result.toString());
+  Widget builtSearchBar() {
+    return SearchMapPlaceWidget(
+      apiKey: APIKeys.google_map_key,
+      strictBounds: false,
+      language: 'en',
+      // location: LatLng(location.latitude, location.longitude),
+      // radius: 100,
+      onSelected: (Place place) async {
+        print(place.fullJSON.toString());
+        place.geolocation.then((onValue) {
+          print(onValue.coordinates.toString());
+        }).catchError((e) {
+          print(e);
+        });
+        final geolocation = await place.geolocation;
+        print(geolocation.fullJSON);
+      },
+      onSearch: (Place place) async {
+        print(place.description);
+        final geolocation = await place.geolocation;
+        print(geolocation.fullJSON);
+      },
+    );
   }
 
   @override
