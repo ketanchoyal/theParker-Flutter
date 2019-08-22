@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Widgets/AnimatedBottomNavigation.dart';
@@ -99,8 +101,19 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: <Widget>[
           MapPage(),
           CustomBottomNavigationBarAnimated(
-            currentBottomBarPercent: (currentBottomBarPercent) {
-              if (currentBottomBarPercent > 0.25) {
+            currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
+              print("Parallex Percentage : " +
+                  currentBottomBarParallexPercent.toString());
+              if (currentBottomBarParallexPercent > 0.25) {
+                if (isProfileOpen) {
+                  animateProfile(false);
+                }
+              }
+            },
+            currentBottomBarMorePercent: (currentBottomBarMorePercent) {
+              print("More Percentage : " +
+                  currentBottomBarMorePercent.toString());
+              if (currentBottomBarMorePercent > 0.25) {
                 if (isProfileOpen) {
                   animateProfile(false);
                 }
@@ -109,14 +122,53 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             currentProfilePercentage: currentProfilePercent,
             onTap: (value) => {
               if (value == 0)
-                {
-                  // scaffoldKey.currentState.openDrawer()
-                }
+                {hideProfile()}
               else if (value == 1)
-                {showCards()}
+                {hideProfile()}
               else
                 {showPlacePicker(context)}
             },
+            moreButtons: [
+              MoreButtonModel(
+                icon: MaterialCommunityIcons.wallet,
+                label: 'Wallet',
+                onTap: () {},
+              ),
+              MoreButtonModel(
+                icon: MaterialCommunityIcons.parking,
+                label: 'My Bookings',
+                onTap: () {},
+              ),
+              MoreButtonModel(
+                icon: MaterialCommunityIcons.car_multiple,
+                label: 'My Cars',
+                onTap: () {},
+              ),
+              MoreButtonModel(
+                icon: FontAwesome.book,
+                label: 'Transactions',
+                onTap: () {},
+              ),
+              MoreButtonModel(
+                icon: MaterialCommunityIcons.home_map_marker,
+                label: 'Offer Parking',
+                onTap: () {},
+              ),
+              MoreButtonModel(
+                icon: FontAwesome5Regular.user_circle,
+                label: 'Profile',
+                onTap: () {
+                  animateProfile(true);
+                },
+              ),
+              MoreButtonModel(
+                icon: EvaIcons.settings,
+                label: 'Settings',
+                onTap: () {},
+              ),
+              null,
+              null,
+            ],
           ),
           ProfilePage(
             currentSearchPercent: currentProfilePercent,
@@ -133,7 +185,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     );
   }
 
-  showCards() {
+  hideProfile() {
     animateProfile(false);
     // setState(() {});
   }

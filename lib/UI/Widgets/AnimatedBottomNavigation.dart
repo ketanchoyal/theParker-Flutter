@@ -1,10 +1,8 @@
 import 'dart:math';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:koukicons/moneyTransfer.dart';
-import 'package:koukicons/simCard.dart';
-import 'package:koukicons/tabletAndroid.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
 import 'package:the_parker/UI/Widgets/ease_in_widget.dart';
@@ -14,19 +12,35 @@ double bottomBarVisibleHeight = 55.0;
 double bottomBarOriginalHeight = 80.0;
 double bottomBarExpandedHeight = 300.0;
 
+class MoreButtonModel {
+  final IconData icon;
+  final String label;
+  final Function onTap;
+
+  MoreButtonModel({
+    @required this.icon,
+    @required this.label,
+    @required this.onTap,
+  });
+}
+
 class CustomBottomNavigationBarAnimated extends StatefulWidget {
   CustomBottomNavigationBarAnimated({
     Key key,
     this.onTap,
-    this.currentBottomBarPercent,
+    this.currentBottomBarParallexPercent,
     this.currentProfilePercentage,
-    // this.closeProfile,
-  }) : super(key: key);
+    this.currentBottomBarMorePercent,
+    this.moreButtons,
+  })  : assert(moreButtons != null ? moreButtons.length <= 9 : true),
+        super(key: key);
 
   final Function(int) onTap;
   // final Function(bool) closeProfile;
-  final Function(double) currentBottomBarPercent;
+  final Function(double) currentBottomBarParallexPercent;
+  final Function(double) currentBottomBarMorePercent;
   final double currentProfilePercentage;
+  final List<MoreButtonModel> moreButtons;
 
   _CustomBottomNavigationBarAnimatedState createState() =>
       _CustomBottomNavigationBarAnimatedState();
@@ -58,7 +72,7 @@ class _CustomBottomNavigationBarAnimatedState
     } else if (offsetBottomBarParallex < 0) {
       offsetBottomBarParallex = 0;
     }
-    widget.currentBottomBarPercent(currentBottomBarParallexPercentage);
+    widget.currentBottomBarParallexPercent(currentBottomBarParallexPercentage);
     setState(() {});
   }
 
@@ -121,7 +135,7 @@ class _CustomBottomNavigationBarAnimatedState
     } else if (offsetBottomBarMore < 0) {
       offsetBottomBarMore = 0;
     }
-    widget.currentBottomBarPercent(currentBottomBarMorePercentage);
+    widget.currentBottomBarMorePercent(currentBottomBarMorePercentage);
     setState(() {});
   }
 
@@ -168,8 +182,12 @@ class _CustomBottomNavigationBarAnimatedState
       if (isBottomBarParallexOpen) {
         animateBottomBarParallex(false);
       }
+      if (isBottomBarMoreOpen) {
+        animateBottomBarMore(false);
+      }
     }
     return CustomBottomNavigationBar(
+      moreButtons: widget.moreButtons,
       //* "Parallex" Animation
       animateBottomBarParallex: animateBottomBarParallex,
       currentBottomBarParallexPercentage: currentBottomBarParallexPercentage,
@@ -207,9 +225,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
     this.isBottomBarMoreOpen,
     this.onMorePanDown,
     this.onMoreVerticalDragUpdate,
+    this.moreButtons,
   }) : super(key: key);
 
   final Function(int) onTap;
+
+  final List<MoreButtonModel> moreButtons;
 
   final double currentBottomBarParallexPercentage;
   final Function(bool) animateBottomBarParallex;
@@ -278,90 +299,74 @@ class CustomBottomNavigationBar extends StatelessWidget {
             children: <Widget>[
               Align(
                 alignment: Alignment.topLeft,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  // color: Colors.red,
-                  child: FlatButton(
-                    child: Icon(
-                      Icons.monetization_on,
-                      size: 50,
-                    ),
-                    onPressed: () {},
-                  ),
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[0],
                 ),
               ),
               Align(
                 alignment: Alignment.topCenter,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[1],
                 ),
               ),
               Align(
                 alignment: Alignment.topRight,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[2],
                 ),
               ),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[3],
                 ),
               ),
               Align(
                 alignment: Alignment.center,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[4],
                 ),
               ),
               Align(
                 alignment: Alignment.centerRight,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[5],
                 ),
               ),
               Align(
                 alignment: Alignment.bottomLeft,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[6],
                 ),
               ),
               Align(
                 alignment: Alignment.bottomCenter,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[7],
                 ),
               ),
               Align(
                 alignment: Alignment.bottomRight,
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  height:
-                      (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
-                  color: Colors.red,
+                child: MoreButtons(
+                  currentBottomBarMorePercentage:
+                      currentBottomBarMorePercentage,
+                  model: moreButtons[8],
                 ),
               ),
             ],
@@ -643,5 +648,58 @@ class CustomBottomNavigationBar extends StatelessWidget {
         animateBottomBarMore(false);
       }
     }
+  }
+}
+
+class MoreButtons extends StatelessWidget {
+  const MoreButtons({
+    Key key,
+    @required this.currentBottomBarMorePercentage,
+    @required this.model,
+  }) : super(key: key);
+
+  final double currentBottomBarMorePercentage;
+  final MoreButtonModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: MediaQuery.of(context).size.width * 0.3,
+      height: (bottomBarExpandedHeight - bottomBarVisibleHeight) * 0.3,
+      // color: Colors.red,
+      child: model == null
+          ? SizedBox()
+          : FlatButton(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Icon(
+                    model.icon,
+                    size: MediaQuery.of(context).size.width *
+                        0.33 *
+                        currentBottomBarMorePercentage /
+                        3,
+                    // size: 45,
+                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  Text(
+                    model.label,
+                    textAlign: TextAlign.center,
+                    style: ktitleStyle.copyWith(
+                      // fontSize: 14,
+                      fontSize: MediaQuery.of(context).size.width *
+                          0.1 *
+                          currentBottomBarMorePercentage /
+                          3,
+                    ),
+                  )
+                ],
+              ),
+              onPressed: model.onTap,
+            ),
+    );
   }
 }

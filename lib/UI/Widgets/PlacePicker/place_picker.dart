@@ -2,8 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:location/location.dart';
+// import 'package:location/location.dart';
 import 'package:http/http.dart' as http;
 import 'uuid.dart';
 
@@ -512,14 +513,27 @@ class PlacePickerState extends State<PlacePicker> {
   }
 
   void moveToCurrentUserLocation() {
-    var location = Location();
-    location.getLocation().then((locationData) {
-      LatLng target = LatLng(locationData.latitude, locationData.longitude);
-      moveToLocation(target);
-    }).catchError((error) {
-      // TODO: Handle the exception here
-      print(error);
-    });
+    bool androidFusedLocation = true;
+
+    Geolocator()
+      ..forceAndroidLocationManager = !androidFusedLocation
+      ..getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.best,
+      ).then((position) {
+        LatLng target = LatLng(position.latitude, position.longitude);
+        moveToLocation(target);
+      }).catchError((e) {
+        //
+      });
+
+    // var location = Location();
+    // location.getLocation().then((locationData) {
+    //   LatLng target = LatLng(locationData.latitude, locationData.longitude);
+    //   moveToLocation(target);
+    // }).catchError((error) {
+    //   // TODO: Handle the exception here
+    //   print(error);
+    // });
   }
 }
 

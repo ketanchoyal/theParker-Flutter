@@ -7,6 +7,8 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double height =
+        (MediaQuery.of(context).size.height) * 0.75 * currentSearchPercent - 5;
     return currentSearchPercent != 0
         ? Positioned(
             top: 5 * currentSearchPercent,
@@ -15,10 +17,7 @@ class ProfilePage extends StatelessWidget {
             child: Opacity(
               opacity: currentSearchPercent,
               child: Container(
-                height: (MediaQuery.of(context).size.height) *
-                        0.75 *
-                        currentSearchPercent -
-                    5,
+                height: height > 0 ? height : 0,
                 decoration: BoxDecoration(
                   color: Colors.red,
                   borderRadius: BorderRadius.all(

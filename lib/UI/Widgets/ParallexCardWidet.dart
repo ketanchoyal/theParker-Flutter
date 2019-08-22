@@ -130,7 +130,7 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
   String getImageUri({int zoom = 15}) {
     mapStaticImageUrl =
         "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/${widget.item.marker.position.longitude},${widget.item.marker.position.latitude},$zoom,0,20/600x400@2x?access_token=pk.eyJ1IjoicGFya2luZ3N5c3RlbSIsImEiOiJjanpqbW9oZ2owYW5zM2dwZWlyd3RuaHRwIn0.kTF1XSrSe23_N-72xCRV4w";
-    print(mapStaticImageUrl);
+    // print(mapStaticImageUrl);
     return mapStaticImageUrl;
   }
 

@@ -25,7 +25,7 @@ class ProfileWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Positioned(
       left: 30,
-      top: (MediaQuery.of(context).size.height) * 0.75 * currentProfilePercent,
+      top: (MediaQuery.of(context).size.height) * 0.75 * currentProfilePercent - 0.5,
       child: GestureDetector(
         onTap: () {
           animateProfile(!isProfileOpen);
@@ -36,7 +36,7 @@ class ProfileWidget extends StatelessWidget {
           _dispatchProfileOffset();
         },
         child: Container(
-          height: 90 - 40 * currentProfilePercent,
+          height: 75 - 25 * currentProfilePercent,
           width: 50,
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
