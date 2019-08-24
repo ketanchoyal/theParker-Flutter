@@ -3,11 +3,14 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:search_map_place/search_map_place.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Widgets/AnimatedBottomNavigation.dart';
+import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
+import 'package:the_parker/UI/utils/page_transformer.dart';
 import 'MapPage.dart';
 
 class HomePage extends StatefulWidget {
@@ -107,93 +110,132 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   CustomBottomNavigationBarAnimated buildCustomBottomNavigationBarAnimated() {
     return CustomBottomNavigationBarAnimated(
-          searchWidget: builtSearchBar(),
-          currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
-            print("Parallex Percentage : " +
-                currentBottomBarParallexPercent.toString());
-            if (currentBottomBarParallexPercent > 0.25) {
-              if (isProfileOpen) {
-                animateProfile(false);
-              }
-            }
-          },
-          currentBottomBarMorePercent: (currentBottomBarMorePercent) {
-            print("More Percentage : " +
-                currentBottomBarMorePercent.toString());
-            if (currentBottomBarMorePercent > 0.25) {
-              if (isProfileOpen) {
-                animateProfile(false);
-              }
-            }
-          },
-          currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {
-            this.currentBottomBarSearchPercent =
-                currentBottomBarSearchPercent;
-            print('Search Percentage : ' +
-                currentBottomBarSearchPercent.toString());
+      searchWidget: builtSearchBar(),
+      currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
+        print("Parallex Percentage : " +
+            currentBottomBarParallexPercent.toString());
+        if (currentBottomBarParallexPercent > 0.25) {
+          if (isProfileOpen) {
+            animateProfile(false);
+          }
+        }
+      },
+      currentBottomBarMorePercent: (currentBottomBarMorePercent) {
+        print("More Percentage : " + currentBottomBarMorePercent.toString());
+        if (currentBottomBarMorePercent > 0.25) {
+          if (isProfileOpen) {
+            animateProfile(false);
+          }
+        }
+      },
+      currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {
+        this.currentBottomBarSearchPercent = currentBottomBarSearchPercent;
+        print(
+            'Search Percentage : ' + currentBottomBarSearchPercent.toString());
 
-            if (currentBottomBarSearchPercent == 0.0) {
-              searchBarVisible = false;
-            } else {
-              searchBarVisible = true;
-            }
-            setState(() {});
+        if (currentBottomBarSearchPercent == 0.0) {
+          searchBarVisible = false;
+        } else {
+          searchBarVisible = true;
+        }
+        setState(() {});
+      },
+      currentProfilePercentage: currentProfilePercent,
+      onTap: (value) => {
+        if (value == 0)
+          {hideProfile()}
+        else if (value == 1)
+          {hideProfile()}
+        else
+          {
+            enableDisableSearchBar()
+            // showPlacePicker(context)
+          }
+      },
+      moreButtons: [
+        MoreButtonModel(
+          icon: MaterialCommunityIcons.wallet,
+          label: 'Wallet',
+          onTap: () {},
+        ),
+        MoreButtonModel(
+          icon: MaterialCommunityIcons.parking,
+          label: 'My Bookings',
+          onTap: () {},
+        ),
+        MoreButtonModel(
+          icon: MaterialCommunityIcons.car_multiple,
+          label: 'My Cars',
+          onTap: () {},
+        ),
+        MoreButtonModel(
+          icon: FontAwesome.book,
+          label: 'Transactions',
+          onTap: () {},
+        ),
+        MoreButtonModel(
+          icon: MaterialCommunityIcons.home_map_marker,
+          label: 'Offer Parking',
+          onTap: () {},
+        ),
+        MoreButtonModel(
+          icon: FontAwesome5Regular.user_circle,
+          label: 'Profile',
+          onTap: () {
+            animateProfile(true);
           },
-          currentProfilePercentage: currentProfilePercent,
-          onTap: (value) => {
-            if (value == 0)
-              {hideProfile()}
-            else if (value == 1)
-              {hideProfile()}
-            else
-              {
-                enableDisableSearchBar()
-                // showPlacePicker(context)
-              }
-          },
-          moreButtons: [
-            MoreButtonModel(
-              icon: MaterialCommunityIcons.wallet,
-              label: 'Wallet',
-              onTap: () {},
-            ),
-            MoreButtonModel(
-              icon: MaterialCommunityIcons.parking,
-              label: 'My Bookings',
-              onTap: () {},
-            ),
-            MoreButtonModel(
-              icon: MaterialCommunityIcons.car_multiple,
-              label: 'My Cars',
-              onTap: () {},
-            ),
-            MoreButtonModel(
-              icon: FontAwesome.book,
-              label: 'Transactions',
-              onTap: () {},
-            ),
-            MoreButtonModel(
-              icon: MaterialCommunityIcons.home_map_marker,
-              label: 'Offer Parking',
-              onTap: () {},
-            ),
-            MoreButtonModel(
-              icon: FontAwesome5Regular.user_circle,
-              label: 'Profile',
-              onTap: () {
-                animateProfile(true);
-              },
-            ),
-            MoreButtonModel(
-              icon: EvaIcons.settings,
-              label: 'Settings',
-              onTap: () {},
-            ),
-            null,
-            null,
-          ],
-        );
+        ),
+        MoreButtonModel(
+          icon: EvaIcons.settings,
+          label: 'Settings',
+          onTap: () {},
+        ),
+        null,
+        null,
+      ],
+      parallexCardPageTransformer: PageTransformer(
+        pageViewBuilder: (context, visibilityResolver) {
+          return PageView.builder(
+            controller: PageController(viewportFraction: 0.85),
+            itemCount: parallaxCardItemsList.length,
+            itemBuilder: (context, index) {
+              final item = parallaxCardItemsList[index];
+              final pageVisibility =
+                  visibilityResolver.resolvePageVisibility(index);
+              return ParallaxCardsWidget(
+                item: item,
+                pageVisibility: pageVisibility,
+              );
+            },
+          );
+        },
+      ),
+    );
   }
+
+  final parallaxCardItemsList = <ParallaxCardItem>[
+    ParallaxCardItem(
+      title: 'Some Random Route 1',
+      body: 'Place 1',
+      marker: Marker(
+          markerId: MarkerId('nswtdkaslnnad'),
+          position: LatLng(19.017573, 72.856276)),
+    ),
+    ParallaxCardItem(
+      title: 'Some Random Route 2',
+      body: 'Place 2',
+      marker: Marker(
+          markerId: MarkerId('nsdkasnnad'),
+          position: LatLng(19.017573, 72.856276)),
+    ),
+    ParallaxCardItem(
+      title: 'Some Random Route 3',
+      body: 'Place 1',
+      marker: Marker(
+          markerId: MarkerId('nsdkasnndswad'),
+          position: LatLng(19.077573, 72.856276)),
+    ),
+  ];
 
   hideProfile() {
     animateProfile(false);

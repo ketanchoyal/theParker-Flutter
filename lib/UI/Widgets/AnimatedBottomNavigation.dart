@@ -1,9 +1,7 @@
 import 'dart:math';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
 import 'package:the_parker/UI/Widgets/ease_in_widget.dart';
 import 'package:the_parker/UI/utils/page_transformer.dart';
 
@@ -33,6 +31,7 @@ class CustomBottomNavigationBarAnimated extends StatefulWidget {
     this.currentBottomBarSearchPercent,
     this.moreButtons,
     this.searchWidget,
+    this.parallexCardPageTransformer,
   })  : assert(moreButtons != null ? moreButtons.length <= 9 : true),
         super(key: key);
 
@@ -47,6 +46,7 @@ class CustomBottomNavigationBarAnimated extends StatefulWidget {
   ///Maximum 9 buttons can be added.
   ///Buttons will be placed according to the list order.
   final List<MoreButtonModel> moreButtons;
+  final PageTransformer parallexCardPageTransformer;
 
   _CustomBottomNavigationBarAnimatedState createState() =>
       _CustomBottomNavigationBarAnimatedState();
@@ -268,6 +268,7 @@ class _CustomBottomNavigationBarAnimatedState
     return CustomBottomNavigationBar(
       moreButtons: widget.moreButtons,
       searchWidget: widget.searchWidget,
+      parallexCardPageTransformer: widget.parallexCardPageTransformer,
       //* "Parallex" Animation
       animateBottomBarParallex: animateBottomBarParallex,
       currentBottomBarParallexPercentage: currentBottomBarParallexPercentage,
@@ -304,6 +305,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     Key key,
     this.onTap,
     this.searchWidget,
+    this.parallexCardPageTransformer,
     //Parallex
     this.animateBottomBarParallex,
     this.currentBottomBarParallexPercentage,
@@ -348,6 +350,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
   final bool isBottomBarSearchOpen;
   final Function(DragUpdateDetails) onSearchVerticalDragUpdate;
   final Function() onSearchPanDown;
+  final PageTransformer parallexCardPageTransformer;
 
   @override
   Widget build(BuildContext context) {
@@ -720,61 +723,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 
-  final parallaxCardItemsList = <ParallaxCardItem>[
-    ParallaxCardItem(
-      title: 'Some Random Route 1',
-      body: 'Place 1',
-      marker: Marker(
-          markerId: MarkerId('nswtdkaslnnad'),
-          position: LatLng(19.017573, 72.856276)),
-    ),
-    ParallaxCardItem(
-      title: 'Some Random Route 2',
-      body: 'Place 2',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnnad'),
-          position: LatLng(19.017573, 72.856276)),
-    ),
-    ParallaxCardItem(
-      title: 'Some Random Route 3',
-      body: 'Place 1',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnndswad'),
-          position: LatLng(19.077573, 72.856276)),
-    ),
-  ];
-
   Widget _buildParallexCards(BuildContext context) {
     return Positioned(
       bottom: 30 * currentBottomBarParallexPercentage,
       left: 0,
       right: 0,
       child: Container(
-        height: (bottomBarExpandedHeight - bottomBarVisibleHeight - 10) *
-            currentBottomBarParallexPercentage,
+        // height: (bottomBarExpandedHeight - bottomBarVisibleHeight - 10) *
+        //     currentBottomBarParallexPercentage,
         child: Padding(
-          padding: EdgeInsets.only(
-              bottom: 30.0 * currentBottomBarParallexPercentage),
+          padding: EdgeInsets.only(bottom: 25.0),
           child: SizedBox.fromSize(
-            size: Size.fromHeight(200.0 * currentBottomBarParallexPercentage),
-            child: PageTransformer(
-              pageViewBuilder: (context, visibilityResolver) {
-                return PageView.builder(
-                  controller: PageController(viewportFraction: 0.85),
-                  itemCount: parallaxCardItemsList.length,
-                  itemBuilder: (context, index) {
-                    final item = parallaxCardItemsList[index];
-                    final pageVisibility =
-                        visibilityResolver.resolvePageVisibility(index);
-                    return ParallaxCardsWidget(
-                      item: item,
-                      pageVisibility: pageVisibility,
-                    );
-                  },
-                );
-              },
-            ),
-          ),
+              size: Size.fromHeight(210.0 * currentBottomBarParallexPercentage),
+              child: parallexCardPageTransformer),
         ),
       ),
     );
