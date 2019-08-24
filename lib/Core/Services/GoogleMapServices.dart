@@ -4,8 +4,6 @@ import 'dart:convert';
 
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 
-
-
 class GoogleMapsServices {
   var apiKey = APIKeys.google_map_key;
   Future<String> getRouteCoordinates(LatLng l1, LatLng l2) async {

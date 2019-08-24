@@ -294,6 +294,8 @@ class _CustomBottomNavigationBarAnimatedState
   void dispose() {
     super.dispose();
     animationControllerBottomBarParallex?.dispose();
+    animationControllerBottomBarMore?.dispose();
+    animationControllerBottomBarSearch?.dispose();
   }
 }
 
@@ -720,22 +722,22 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   final parallaxCardItemsList = <ParallaxCardItem>[
     ParallaxCardItem(
-      title: 'Overexposed',
-      body: 'Maroon 5',
+      title: 'Some Random Route 1',
+      body: 'Place 1',
       marker: Marker(
           markerId: MarkerId('nswtdkaslnnad'),
           position: LatLng(19.017573, 72.856276)),
     ),
     ParallaxCardItem(
-      title: 'Blurryface',
-      body: 'Twenty One Pilots',
+      title: 'Some Random Route 2',
+      body: 'Place 2',
       marker: Marker(
           markerId: MarkerId('nsdkasnnad'),
           position: LatLng(19.017573, 72.856276)),
     ),
     ParallaxCardItem(
-      title: 'Free Spirit',
-      body: 'Khalid',
+      title: 'Some Random Route 3',
+      body: 'Place 1',
       marker: Marker(
           markerId: MarkerId('nsdkasnndswad'),
           position: LatLng(19.077573, 72.856276)),

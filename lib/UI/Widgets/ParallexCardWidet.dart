@@ -3,13 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/StaticImagee/StaticImage.dart';
+import 'package:the_parker/UI/Resources/MapBoxStaticImage.dart';
 import 'package:the_parker/UI/utils/page_transformer.dart';
-
-// enum MapStyle
-// {
-//   value="light-v10"Mapbox Light</option><option value="mapbox://styles/mapbox/dark-v10">Mapbox Dark</option><option value="mapbox://styles/mapbox/streets-v11">Mapbox Streets</option><option value="mapbox://styles/mapbox/outdoors-v11">Mapbox Outdoors</option><option value="mapbox://styles/mapbox/satellite-v9">Mapbox Satellite</option><option value="mapbox://styles/mapbox/satellite-streets-v11">Mapbox Satellite Streets</option></select>
-// }
 
 class ParallaxCardItem {
   ParallaxCardItem({this.title, this.body, this.marker, this.userPosition});
@@ -34,7 +29,6 @@ class ParallaxCardsWidget extends StatefulWidget {
 }
 
 class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
-  var staticMapProvider = StaticMapProvider(APIKeys.google_map_key);
   String mapStaticImageUrl;
 
   final CameraPosition _initialCamera = CameraPosition(
@@ -87,10 +81,10 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
           widget.item.body,
           style: ktitleStyle.copyWith(
             color: Colors.white,
-            fontWeight: FontWeight.w600,
+            // fontWeight: FontWeight.w600,
             fontSize: 22.0,
           ),
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
         ),
       ),
     );
@@ -101,12 +95,12 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
         padding: EdgeInsets.all(3.0),
         child: Text(
           widget.item.title,
-          style: ktitleStyle.copyWith(
+          style: ksubtitleStyle.copyWith(
             color: Colors.white,
-            fontWeight: FontWeight.w700,
+            // fontWeight: FontWeight.w700,
             fontSize: 20.0,
           ),
-          textAlign: TextAlign.center,
+          textAlign: TextAlign.left,
         ),
       ),
     );
@@ -128,8 +122,31 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
   }
 
   String getImageUri({int zoom = 15}) {
-    mapStaticImageUrl =
-        "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/${widget.item.marker.position.longitude},${widget.item.marker.position.latitude},$zoom,0,20/600x400@2x?access_token=pk.eyJ1IjoicGFya2luZ3N5c3RlbSIsImEiOiJjanpqbW9oZ2owYW5zM2dwZWlyd3RuaHRwIn0.kTF1XSrSe23_N-72xCRV4w";
+    //TODO : Inititate it in locator to use same instance everytime
+    MapBoxStaticImage staticImage =
+        MapBoxStaticImage(apiKey: APIKeys.map_box_key);
+    // mapStaticImageUrl = staticImage.getStaticUrlWithMarker(
+    //     center: Location(widget.item.marker.position.latitude,
+    //         widget.item.marker.position.longitude),
+    //     height: 300,
+    //     width: 400,
+    //     render2x: false,
+    //     zoomLevel: zoom,
+    //     style: MapBoxStyle.Mapbox_Streets);
+    mapStaticImageUrl = staticImage.getStaticUrlWithPolyline(
+      point1: Location(37.77343, -122.46589),
+      point2: Location(37.75965, -122.42816),
+      pin1: CreatePin(pinColor: Colors.black, pinLetter: 'p', pinSize: 'l'),
+      pin2: CreatePin(pinColor: Colors.redAccent, pinLetter: 'q', pinSize: 's'),
+      height: 300,
+      width: 600,
+      zoomLevel: 16,
+      style: MapBoxStyle.Mapbox_Streets,
+      path: CreatePath(pathColor: Colors.black, pathOpacity: 0.5, pathWidth: 5),
+      render2x: true,
+    );
+    // mapStaticImageUrl =
+    //     "https://api.mapbox.com/styles/v1/mapbox/outdoors-v11/static/${widget.item.marker.position.longitude},${widget.item.marker.position.latitude},$zoom,0,20/600x400@2x?access_token=pk.eyJ1IjoicGFya2luZ3N5c3RlbSIsImEiOiJjanpqbW9oZ2owYW5zM2dwZWlyd3RuaHRwIn0.kTF1XSrSe23_N-72xCRV4w";
     // print(mapStaticImageUrl);
     return mapStaticImageUrl;
   }
@@ -177,7 +194,7 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
     );
 
     var googleMap = Image.network(
-      getImageUri(zoom: 15),
+      getImageUri(zoom: 17),
       fit: BoxFit.cover,
     );
 
@@ -214,7 +231,7 @@ class _ParallaxCardsWidgetState extends State<ParallaxCardsWidget> {
             fit: StackFit.expand,
             children: [
               googleMap,
-              centerMarker,
+              // centerMarker,
               imageOverlayGradient,
               _buildTextContainer(context),
             ],

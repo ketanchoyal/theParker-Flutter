@@ -89,93 +89,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         children: <Widget>[
           MapPage(),
           // _builtSearchBar(),
-          CustomBottomNavigationBarAnimated(
-            searchWidget: builtSearchBar(),
-            currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
-              print("Parallex Percentage : " +
-                  currentBottomBarParallexPercent.toString());
-              if (currentBottomBarParallexPercent > 0.25) {
-                if (isProfileOpen) {
-                  animateProfile(false);
-                }
-              }
-            },
-            currentBottomBarMorePercent: (currentBottomBarMorePercent) {
-              print("More Percentage : " +
-                  currentBottomBarMorePercent.toString());
-              if (currentBottomBarMorePercent > 0.25) {
-                if (isProfileOpen) {
-                  animateProfile(false);
-                }
-              }
-            },
-            currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {
-              this.currentBottomBarSearchPercent =
-                  currentBottomBarSearchPercent;
-              print('Search Percentage : ' +
-                  currentBottomBarSearchPercent.toString());
-
-              if (currentBottomBarSearchPercent == 0.0) {
-                searchBarVisible = false;
-              } else {
-                searchBarVisible = true;
-              }
-              setState(() {});
-            },
-            currentProfilePercentage: currentProfilePercent,
-            onTap: (value) => {
-              if (value == 0)
-                {hideProfile()}
-              else if (value == 1)
-                {hideProfile()}
-              else
-                {
-                  enableDisableSearchBar()
-                  // showPlacePicker(context)
-                }
-            },
-            moreButtons: [
-              MoreButtonModel(
-                icon: MaterialCommunityIcons.wallet,
-                label: 'Wallet',
-                onTap: () {},
-              ),
-              MoreButtonModel(
-                icon: MaterialCommunityIcons.parking,
-                label: 'My Bookings',
-                onTap: () {},
-              ),
-              MoreButtonModel(
-                icon: MaterialCommunityIcons.car_multiple,
-                label: 'My Cars',
-                onTap: () {},
-              ),
-              MoreButtonModel(
-                icon: FontAwesome.book,
-                label: 'Transactions',
-                onTap: () {},
-              ),
-              MoreButtonModel(
-                icon: MaterialCommunityIcons.home_map_marker,
-                label: 'Offer Parking',
-                onTap: () {},
-              ),
-              MoreButtonModel(
-                icon: FontAwesome5Regular.user_circle,
-                label: 'Profile',
-                onTap: () {
-                  animateProfile(true);
-                },
-              ),
-              MoreButtonModel(
-                icon: EvaIcons.settings,
-                label: 'Settings',
-                onTap: () {},
-              ),
-              null,
-              null,
-            ],
-          ),
+          buildCustomBottomNavigationBarAnimated(),
           ProfilePage(
             currentSearchPercent: currentProfilePercent,
           ),
@@ -189,6 +103,96 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ],
       ),
     );
+  }
+
+  CustomBottomNavigationBarAnimated buildCustomBottomNavigationBarAnimated() {
+    return CustomBottomNavigationBarAnimated(
+          searchWidget: builtSearchBar(),
+          currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
+            print("Parallex Percentage : " +
+                currentBottomBarParallexPercent.toString());
+            if (currentBottomBarParallexPercent > 0.25) {
+              if (isProfileOpen) {
+                animateProfile(false);
+              }
+            }
+          },
+          currentBottomBarMorePercent: (currentBottomBarMorePercent) {
+            print("More Percentage : " +
+                currentBottomBarMorePercent.toString());
+            if (currentBottomBarMorePercent > 0.25) {
+              if (isProfileOpen) {
+                animateProfile(false);
+              }
+            }
+          },
+          currentBottomBarSearchPercent: (currentBottomBarSearchPercent) {
+            this.currentBottomBarSearchPercent =
+                currentBottomBarSearchPercent;
+            print('Search Percentage : ' +
+                currentBottomBarSearchPercent.toString());
+
+            if (currentBottomBarSearchPercent == 0.0) {
+              searchBarVisible = false;
+            } else {
+              searchBarVisible = true;
+            }
+            setState(() {});
+          },
+          currentProfilePercentage: currentProfilePercent,
+          onTap: (value) => {
+            if (value == 0)
+              {hideProfile()}
+            else if (value == 1)
+              {hideProfile()}
+            else
+              {
+                enableDisableSearchBar()
+                // showPlacePicker(context)
+              }
+          },
+          moreButtons: [
+            MoreButtonModel(
+              icon: MaterialCommunityIcons.wallet,
+              label: 'Wallet',
+              onTap: () {},
+            ),
+            MoreButtonModel(
+              icon: MaterialCommunityIcons.parking,
+              label: 'My Bookings',
+              onTap: () {},
+            ),
+            MoreButtonModel(
+              icon: MaterialCommunityIcons.car_multiple,
+              label: 'My Cars',
+              onTap: () {},
+            ),
+            MoreButtonModel(
+              icon: FontAwesome.book,
+              label: 'Transactions',
+              onTap: () {},
+            ),
+            MoreButtonModel(
+              icon: MaterialCommunityIcons.home_map_marker,
+              label: 'Offer Parking',
+              onTap: () {},
+            ),
+            MoreButtonModel(
+              icon: FontAwesome5Regular.user_circle,
+              label: 'Profile',
+              onTap: () {
+                animateProfile(true);
+              },
+            ),
+            MoreButtonModel(
+              icon: EvaIcons.settings,
+              label: 'Settings',
+              onTap: () {},
+            ),
+            null,
+            null,
+          ],
+        );
   }
 
   hideProfile() {
@@ -211,6 +215,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       // radius: 100,
       onSelected: (Place place) async {
         print(place.fullJSON.toString());
+        // print(place.)
         place.geolocation.then((onValue) {
           print(onValue.coordinates.toString());
         }).catchError((e) {
