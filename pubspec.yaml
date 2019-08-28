@@ -20,8 +20,10 @@ dependencies:
   custom_radio_grouped_button: ^1.0.0
   flutter_vector_icons: ^0.2.0
   # search_map_place: ^0.1.0+2
-  extended_navbar_scaffold: ^1.0.0
+  extended_navbar_scaffold: ^1.0.1
   mapbox_search: ^1.0.1
+  flutter_map: ^0.7.0+2
+  flutter_3d_obj: ^0.0.6
 
 dev_dependencies:
   flutter_test:

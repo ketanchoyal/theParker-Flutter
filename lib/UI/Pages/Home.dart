@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mapbox_search/mapbox_search.dart';
+import 'package:the_parker/UI/Pages/OfferParkingPage.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
+import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
 import 'MapPage.dart';
 
@@ -101,6 +103,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return ExtendedNavigationBarScaffold(
+      elevation: 0,
       searchWidget: builtSearchBar(),
       body: Stack(
         children: <Widget>[
@@ -182,7 +185,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         MoreButtonModel(
           icon: MaterialCommunityIcons.home_map_marker,
           label: 'Offer Parking',
-          onTap: () {},
+          onTap: () {
+            kopenPage(
+              context,
+              OfferParkingPage(),
+            );
+          },
         ),
         MoreButtonModel(
           icon: FontAwesome5Regular.user_circle,
