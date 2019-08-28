@@ -4,12 +4,9 @@ import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
+import 'package:mapbox_search/mapbox_search.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
-import 'package:the_parker/UI/Widgets/MapBox/Location.dart';
-import 'package:the_parker/UI/Widgets/MapBox/MapBoxPlaceSearchWidget.dart';
-import 'package:the_parker/UI/Widgets/MapBox/MapBoxPlaces.dart';
-import 'package:the_parker/UI/Widgets/MapBox/MapBoxStaticImage.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
 import 'MapPage.dart';
 
@@ -212,16 +209,25 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               String mapStaticImageUrl = staticImage.getStaticUrlWithPolyline(
                 point1: Location(lat: 37.77343, lng: -122.46589),
                 point2: Location(lat: 37.75965, lng: -122.42816),
-                pin1: CreatePin(
-                    pinColor: Colors.black, pinLetter: 'p', pinSize: 'l'),
-                pin2: CreatePin(
-                    pinColor: Colors.redAccent, pinLetter: 'q', pinSize: 's'),
+                marker1: MapBoxMarker(
+                    markerColor: Colors.black,
+                    markerLetter: 'p',
+                    markerSize: MarkerSize.LARGE),
+                msrker2: MapBoxMarker(
+                    markerColor: Colors.redAccent,
+                    markerLetter: 'q',
+                    markerSize: MarkerSize.SMALL),
                 height: 300,
                 width: 600,
                 zoomLevel: 16,
                 style: MapBoxStyle.Mapbox_Streets,
-                path: CreatePath(
-                    pathColor: Colors.black, pathOpacity: 0.5, pathWidth: 5),
+                path: MapBoxPath(
+                  pathColor: Colors.black,
+                  pathOpacity: 0.5,
+                  pathWidth: 5,
+                  pathPolyline:
+                      "%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM",
+                ),
                 render2x: true,
               );
               var background = Image.network(
@@ -282,16 +288,21 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget builtSearchBar() {
-    return MapBoxPlaceSearchWidget(
-      apiKey: APIKeys.map_box_key,
-      // strictBounds: false,
-      language: 'en',
-      // location: LatLng(location.latitude, location.longitude),
-      // radius: 100,
-      onSelected: (MapBoxPlace place) async {
-        print(place.center);
-        // print(place.)
-      },
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 5),
+      child: MapBoxPlaceSearchWidget(
+        apiKey: APIKeys.map_box_key,
+        limit: 10,
+        context: context,
+        popOnSelect: false,
+        height: 290,
+        language: 'en',
+        // location: LatLng(location.latitude, location.longitude),
+        onSelected: (MapBoxPlace place) async {
+          print(place.center);
+          // print(place.)
+        },
+      ),
     );
   }
 
