@@ -19,7 +19,8 @@ dependencies:
   http: ^0.12.0+2
   custom_radio_grouped_button: ^1.0.0
   flutter_vector_icons: ^0.2.0
-  search_map_place: ^0.1.0+2
+  # search_map_place: ^0.1.0+2
+  extended_navbar_scaffold: ^1.0.0
 
 dev_dependencies:
   flutter_test:

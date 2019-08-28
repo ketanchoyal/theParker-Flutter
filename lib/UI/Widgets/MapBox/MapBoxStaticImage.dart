@@ -1,13 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:the_parker/UI/Widgets/MapBox/Location.dart';
 
-class Location {
-  final double latitude;
-  final double longitude;
+// class Location {
+//   final double lat;
+//   final double lng;
 
-  Location(this.latitude, this.longitude);
+//   Location({this.lat, this.lng});
 
-}
+// }
 
 enum MapBoxStyle {
   Mapbox_Light,
@@ -91,7 +92,7 @@ class MapBoxStaticImage {
     ///@2x renders the map at 2x scale
     bool render2x,
   }) {
-    return "${center.longitude},${center.latitude},${zoomLevel ?? _defaultZoomLevel},${bearing ?? _defaultBearing},${pitch ?? _defaultPitch}/${width ?? _defaultWidth}x${height ?? _defaultHeight}${render2x ?? _defaultRender2x ? _render2x : _empty}?access_token=$apiKey";
+    return "${center.lng},${center.lat},${zoomLevel ?? _defaultZoomLevel},${bearing ?? _defaultBearing},${pitch ?? _defaultPitch}/${width ?? _defaultWidth}x${height ?? _defaultHeight}${render2x ?? _defaultRender2x ? _render2x : _empty}?access_token=$apiKey";
   }
 
   String getStaticUrlWithoutMarker({
@@ -149,7 +150,7 @@ class MapBoxStaticImage {
         ? _generateMarkerLink(markerUrl ?? _defaultpin.toString())
         : pin.toString();
     String url =
-        "$_mainUrl${MapBoxStyleHelper.getValue(style ?? _defaultMapStyle)}/static/$pinUrl(${center.longitude},${center.latitude})/${_buildUrlwithApi(
+        "$_mainUrl${MapBoxStyleHelper.getValue(style ?? _defaultMapStyle)}/static/$pinUrl(${center.lng},${center.lat})/${_buildUrlwithApi(
       bearing: bearing,
       center: center,
       height: height,
@@ -196,7 +197,7 @@ class MapBoxStaticImage {
         ? _generateMarkerLink(markerUrl ?? _defaultpin.toString())
         : pin2.toString();
     String url =
-        "$_mainUrl${MapBoxStyleHelper.getValue(style ?? _defaultMapStyle)}/static/$pinUrl1(${point1.longitude},${point1.latitude}),$pinUrl2(${point2.longitude},${point2.latitude}),${p.toString()}/auto/${width ?? _defaultWidth}x${height ?? _defaultHeight}${render2x ?? _defaultRender2x ? _render2x : _empty}?access_token=$apiKey";
+        "$_mainUrl${MapBoxStyleHelper.getValue(style ?? _defaultMapStyle)}/static/$pinUrl1(${point1.lng},${point1.lat}),$pinUrl2(${point2.lng},${point2.lat}),${p.toString()}/auto/${width ?? _defaultWidth}x${height ?? _defaultHeight}${render2x ?? _defaultRender2x ? _render2x : _empty}?access_token=$apiKey";
 
     return url;
   }

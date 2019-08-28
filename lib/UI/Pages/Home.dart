@@ -1,17 +1,31 @@
 import 'dart:math';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:search_map_place/search_map_place.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
-import 'package:the_parker/UI/Widgets/AnimatedBottomNavigation.dart';
-import 'package:the_parker/UI/Widgets/ParallexCardWidet.dart';
+import 'package:the_parker/UI/Widgets/MapBox/Location.dart';
+import 'package:the_parker/UI/Widgets/MapBox/MapBoxPlaceSearchWidget.dart';
+import 'package:the_parker/UI/Widgets/MapBox/MapBoxPlaces.dart';
+import 'package:the_parker/UI/Widgets/MapBox/MapBoxStaticImage.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
-import 'package:the_parker/UI/utils/page_transformer.dart';
 import 'MapPage.dart';
+
+// class ParallexCardItemssNew extends ParallaxCardItem {
+//   ParallexCardItemssNew({
+//     this.title,
+//     this.body,
+//     this.background,
+//     this.data,
+//   });
+
+//   final String title;
+//   final String body;
+//   final Widget background;
+//   final dynamic data;
+// }
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -84,15 +98,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     animationControllerProfile.forward();
   }
 
+  MapBoxStaticImage staticImage =
+      MapBoxStaticImage(apiKey: APIKeys.map_box_key);
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: scaffoldKey,
+    return ExtendedNavigationBarScaffold(
+      searchWidget: builtSearchBar(),
       body: Stack(
         children: <Widget>[
           MapPage(),
-          // _builtSearchBar(),
-          buildCustomBottomNavigationBarAnimated(),
           ProfilePage(
             currentSearchPercent: currentProfilePercent,
           ),
@@ -105,16 +120,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         ],
       ),
-    );
-  }
-
-  CustomBottomNavigationBarAnimated buildCustomBottomNavigationBarAnimated() {
-    return CustomBottomNavigationBarAnimated(
-      searchWidget: builtSearchBar(),
-      currentBottomBarParallexPercent: (currentBottomBarParallexPercent) {
+      currentBottomBarCenterPercent: (currentBottomBarCenterPercent) {
         print("Parallex Percentage : " +
-            currentBottomBarParallexPercent.toString());
-        if (currentBottomBarParallexPercent > 0.25) {
+            currentBottomBarCenterPercent.toString());
+        if (currentBottomBarCenterPercent > 0.25) {
           if (isProfileOpen) {
             animateProfile(false);
           }
@@ -140,7 +149,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         }
         setState(() {});
       },
-      currentProfilePercentage: currentProfilePercent,
+      currentExternalAnimationPercentage: currentProfilePercent,
       onTap: (value) => {
         if (value == 0)
           {hideProfile()}
@@ -200,10 +209,33 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             itemCount: parallaxCardItemsList.length,
             itemBuilder: (context, index) {
               final item = parallaxCardItemsList[index];
+              String mapStaticImageUrl = staticImage.getStaticUrlWithPolyline(
+                point1: Location(lat: 37.77343, lng: -122.46589),
+                point2: Location(lat: 37.75965, lng: -122.42816),
+                pin1: CreatePin(
+                    pinColor: Colors.black, pinLetter: 'p', pinSize: 'l'),
+                pin2: CreatePin(
+                    pinColor: Colors.redAccent, pinLetter: 'q', pinSize: 's'),
+                height: 300,
+                width: 600,
+                zoomLevel: 16,
+                style: MapBoxStyle.Mapbox_Streets,
+                path: CreatePath(
+                    pathColor: Colors.black, pathOpacity: 0.5, pathWidth: 5),
+                render2x: true,
+              );
+              var background = Image.network(
+                mapStaticImageUrl,
+                fit: BoxFit.cover,
+              );
               final pageVisibility =
                   visibilityResolver.resolvePageVisibility(index);
               return ParallaxCardsWidget(
-                item: item,
+                item: ParallaxCardItem(
+                  body: item.body,
+                  background: background,
+                  title: item.title,
+                ),
                 pageVisibility: pageVisibility,
               );
             },
@@ -217,23 +249,24 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     ParallaxCardItem(
       title: 'Some Random Route 1',
       body: 'Place 1',
-      marker: Marker(
-          markerId: MarkerId('nswtdkaslnnad'),
-          position: LatLng(19.017573, 72.856276)),
+      // marker: Marker(
+      //   markerId: MarkerId('nswtdkaslnnad'),
+      //   position: LatLng(19.017573, 72.856276),
+      // ),
     ),
     ParallaxCardItem(
       title: 'Some Random Route 2',
       body: 'Place 2',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnnad'),
-          position: LatLng(19.017573, 72.856276)),
+      // marker: Marker(
+      //     markerId: MarkerId('nsdkasnnad'),
+      //     position: LatLng(19.017573, 72.856276)),
     ),
     ParallaxCardItem(
       title: 'Some Random Route 3',
       body: 'Place 1',
-      marker: Marker(
-          markerId: MarkerId('nsdkasnndswad'),
-          position: LatLng(19.077573, 72.856276)),
+      // marker: Marker(
+      //     markerId: MarkerId('nsdkasnndswad'),
+      //     position: LatLng(19.077573, 72.856276)),
     ),
   ];
 
@@ -249,27 +282,15 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 
   Widget builtSearchBar() {
-    return SearchMapPlaceWidget(
-      apiKey: APIKeys.google_map_key,
-      strictBounds: false,
+    return MapBoxPlaceSearchWidget(
+      apiKey: APIKeys.map_box_key,
+      // strictBounds: false,
       language: 'en',
       // location: LatLng(location.latitude, location.longitude),
       // radius: 100,
-      onSelected: (Place place) async {
-        print(place.fullJSON.toString());
+      onSelected: (MapBoxPlace place) async {
+        print(place.center);
         // print(place.)
-        place.geolocation.then((onValue) {
-          print(onValue.coordinates.toString());
-        }).catchError((e) {
-          print(e);
-        });
-        final geolocation = await place.geolocation;
-        print(geolocation.fullJSON);
-      },
-      onSearch: (Place place) async {
-        print(place.description);
-        final geolocation = await place.geolocation;
-        print(geolocation.fullJSON);
       },
     );
   }
