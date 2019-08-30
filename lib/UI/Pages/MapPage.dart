@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
@@ -184,15 +186,21 @@ class MapPageState extends State<MapPage> {
             return Stack(
               children: <Widget>[
                 GoogleMap(
+                  // gestureRecognizers: Set()
+                  //   ..add(Factory<PanGestureRecognizer>(
+                  //       () => PanGestureRecognizer()))
+                  //   ..add(Factory<ScaleGestureRecognizer>(
+                  //       () => ScaleGestureRecognizer()))
+                  //   ..add(Factory<TapGestureRecognizer>(
+                  //       () => TapGestureRecognizer()))
+                  //   ..add(Factory<VerticalDragGestureRecognizer>(
+                  //       () => VerticalDragGestureRecognizer())),
                   mapType: MapType.normal,
                   compassEnabled: true,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
-                  initialCameraPosition: _currentPosition == null
-                      ? _lastKnownPosition == null
-                          ? _initialCamera
-                          : _initialCamera
-                      : _currentPosition,
+                  initialCameraPosition:
+                      _currentPosition ?? _lastKnownPosition ?? _initialCamera,
                   rotateGesturesEnabled: true,
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
@@ -220,6 +228,4 @@ class MapPageState extends State<MapPage> {
       ),
     );
   }
-
-  
 }

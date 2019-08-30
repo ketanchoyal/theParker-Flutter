@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mapbox_search/mapbox_search.dart';
-import 'package:the_parker/UI/Pages/OfferParkingPage.dart';
+import 'package:the_parker/UI/Pages/OfferParking/OfferParkingMap.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
@@ -188,7 +188,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           onTap: () {
             kopenPage(
               context,
-              OfferParkingPage(),
+              OfferParkingMap(),
             );
           },
         ),
