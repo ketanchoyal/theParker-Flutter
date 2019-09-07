@@ -24,7 +24,7 @@ class ProfileWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      left: 20,
+      left: 25,
       top: (MediaQuery.of(context).size.height) * 0.75 * currentProfilePercent - 0.5,
       child: GestureDetector(
         onTap: () {

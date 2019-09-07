@@ -9,7 +9,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
+import 'package:mapbox_search/mapbox_search.dart';
+import 'package:the_parker/UI/Pages/OfferParking/AddressPage.dart';
+import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
+import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
 
 class OfferParkingMap extends StatefulWidget {
   OfferParkingMap({Key key}) : super(key: key);
@@ -180,7 +184,26 @@ class _OfferParkingMapState extends State<OfferParkingMap>
               // heroTag: 'sdsa',
               backgroundColor: Theme.of(context).canvasColor,
               onPressed: () async {
-                await _gotoMyLocation();
+                print(markers.first.point);
+                kopenPage(context, AddressPage());
+                // LatLng point = markers.first.point;
+                // ReverseGeoCoding geoCoding = ReverseGeoCoding(
+                //   apiKey: APIKeys.map_box_key,
+                //   // limit: 5,
+                //   // location: Location(
+                //   //   lat: point.latitude,
+                //   //   lng: point.longitude,
+                //   // ),
+                // );
+
+                // var predection = await geoCoding.getAddress(
+                //   Location(
+                //     lat: point.latitude,
+                //     lng: point.longitude,
+                //   ),
+                // );
+
+                // print(predection.length);
               },
               label: Text(
                 'Next',
@@ -207,48 +230,9 @@ class _OfferParkingMapState extends State<OfferParkingMap>
       body: Stack(
         children: <Widget>[
           buildMap(context),
-          Positioned(
-            top: 0,
-            left: 5,
-            right: 5,
-            child: SafeArea(
-              child: Row(
-                children: <Widget>[
-                  Card(
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      child: RawMaterialButton(
-                        onPressed: () {
-                          kbackBtn(context);
-                        },
-                        child: Icon(
-                          Icons.arrow_back_ios,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Card(
-                      child: Container(
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            'Long Tap to select parking Space',
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: true,
-                            style: ksubtitleStyle.copyWith(fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+          FloatingAppbar(
+            title: 'Long Tap to select parking Space',
+          )
         ],
       ),
     );
@@ -317,8 +301,8 @@ class _OfferParkingMapState extends State<OfferParkingMap>
     LatLng location,
   }) {
     return Marker(
-      width: zoom > 8 ? 20 + zoom : 28,
-      height: zoom > 8 ? 20 + zoom : 28,
+      width: zoom > 8 ? 18 + zoom : 28,
+      height: zoom > 8 ? 18 + zoom : 28,
       point:
           location ?? _currentPosition ?? _lastKnownPosition ?? _initialCamera,
       builder: (ctx) => Container(
