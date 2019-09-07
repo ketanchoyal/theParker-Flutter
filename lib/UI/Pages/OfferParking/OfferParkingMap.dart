@@ -1,5 +1,9 @@
 import 'dart:async';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:flare_dart/math/mat2d.dart';
+import 'package:flare_flutter/flare.dart';
+import 'package:flare_flutter/flare_actor.dart';
+import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -274,7 +278,7 @@ class _OfferParkingMapState extends State<OfferParkingMap>
                     },
                     onTap: (location) {
                       addMarkerInList(
-                        _buildLocationMarker(
+                        _buildAnimatedLocationMarker(
                           color: Colors.red,
                           colorAccent: Colors.redAccent,
                           location: location,
@@ -371,4 +375,64 @@ class _OfferParkingMapState extends State<OfferParkingMap>
       ),
     );
   }
+
+  Marker _buildAnimatedLocationMarker({
+    Color color,
+    Color colorAccent,
+    LatLng location,
+  }) {
+    // final EndLoopController _controller = EndLoopController("jump", 5);
+    return Marker(
+      width: 50,
+      height: 50,
+      point:
+          location ?? _currentPosition ?? _lastKnownPosition ?? _initialCamera,
+      builder: (ctx) => Center(
+        child: FlareActor(
+          "assets/marker.flr",
+          alignment: Alignment.center,
+          // controller: _controller,
+          fit: BoxFit.contain,
+          isPaused: false,
+          animation: "jump",
+        ),
+      ),
+    );
+  }
 }
+
+// class EndLoopController implements FlareController {
+//   final String _animation;
+//   final double _loopAmount;
+//   final double _mix;
+
+//   double _duration = 0.0;
+//   ActorAnimation _actor;
+
+//   EndLoopController(this._animation, this._loopAmount, [this._mix = 0.5]);
+
+//   @override
+//   void initialize(FlutterActorArtboard artboard) {
+//     _actor = artboard.getAnimation(_animation);
+//   }
+
+//   @override
+//   bool advance(FlutterActorArtboard artboard, double elapsed) {
+//     _duration += elapsed;
+
+//     if (_duration > _actor.duration) {
+//       final double loopStart = _actor.duration - _loopAmount;
+//       final double loopProgress = _duration - _actor.duration;
+//       _duration = loopStart + loopProgress;
+//     }
+//     _actor.apply(_duration, artboard, _mix);
+//     return true;
+//   }
+
+//   @override
+//   ValueNotifier<bool> isActive;
+
+//   @override
+//   void setViewTransform(Mat2D viewTransform) {
+//   }
+// }
