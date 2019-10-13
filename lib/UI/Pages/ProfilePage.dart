@@ -52,7 +52,7 @@ class ProfilePage extends StatelessWidget {
         elevation: 2,
         child: ClipPath(
           child: Container(
-            height: height * 0.13,
+            height: height > 0 ? height * 0.13 : 0,
             decoration: BoxDecoration(
               border: Border(
                 right: BorderSide(
@@ -66,7 +66,7 @@ class ProfilePage extends StatelessWidget {
                 Expanded(
                   flex: 3,
                   child: Container(
-                    height: height * 0.13,
+                    height: height > 0 ? height * 0.13 : 0,
                     child: Stack(
                       children: <Widget>[
                         Positioned(
@@ -113,7 +113,7 @@ class ProfilePage extends StatelessWidget {
                   flex: 8,
                   child: Container(
                     padding: EdgeInsets.all(5),
-                    height: height * 0.13 * 1,
+                    height: height > 0 ? height * 0.13 * 1 : 0,
                     // color: Colors.blue,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

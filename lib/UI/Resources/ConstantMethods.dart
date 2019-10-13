@@ -23,8 +23,44 @@ var kTextFieldDecoration = InputDecoration(
   border: OutlineInputBorder(
     borderRadius: BorderRadius.circular(16),
   ),
+  labelStyle: ksubtitleStyle.copyWith(
+    color: Colors.black,
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Colors.black,
+      width: 2,
+      style: BorderStyle.solid,
+    ),
+    borderRadius: BorderRadius.circular(18),
+  ),
   hintStyle: TextStyle(height: 1.5, fontWeight: FontWeight.w300),
-  contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+  contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+);
+
+var kTextFieldDecorationAddress = InputDecoration(
+  labelStyle: ksubtitleStyle.copyWith(
+    color: Colors.black,
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderSide: BorderSide(
+      color: Colors.black,
+      width: 2,
+      style: BorderStyle.solid,
+    ),
+    borderRadius: BorderRadius.circular(10),
+  ),
+  border: OutlineInputBorder(
+    borderRadius: BorderRadius.circular(5),
+  ),
+  hintStyle: TextStyle(
+    height: 1.5,
+    fontWeight: FontWeight.w300,
+  ),
+  contentPadding: EdgeInsets.symmetric(
+    vertical: 20.0,
+    horizontal: 20.0,
+  ),
 );
 
 TextStyle ktitleStyle = TextStyle(fontWeight: FontWeight.w800);

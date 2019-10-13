@@ -23,6 +23,7 @@ class FloatingAppbar extends StatelessWidget {
               tag: 'backkk',
               transitionOnUserGestures: true,
               child: Card(
+                elevation: 10,
                 child: Container(
                   height: 50,
                   width: 50,
@@ -42,6 +43,7 @@ class FloatingAppbar extends StatelessWidget {
                 tag: 'titleee',
                 // transitionOnUserGestures: true,
                 child: Card(
+                  elevation: 10,
                   child: Container(
                     height: 50,
                     child: Center(

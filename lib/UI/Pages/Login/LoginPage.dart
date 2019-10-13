@@ -3,7 +3,6 @@ import 'package:the_parker/UI/Pages/Home.dart';
 import 'package:the_parker/UI/Pages/Login/MobileLoginPage.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Resources/Resources.dart';
-import 'package:the_parker/UI/Widgets/ReusableRoundedButton.dart';
 import 'package:the_parker/UI/Widgets/TopBar.dart';
 import 'ForgotPassword.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextField(
                     onChanged: (email) {},
                     keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    style: ksubtitleStyle.copyWith(fontSize: 18),
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: Kstrings.email_hint,
                       labelText: Kstrings.email,
@@ -97,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                     obscureText: true,
                     onChanged: (password) {},
                     keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                    style: ksubtitleStyle.copyWith(fontSize: 18),
                     decoration: kTextFieldDecoration.copyWith(
                       hintText: Kstrings.password_hint,
                       labelText: Kstrings.password,

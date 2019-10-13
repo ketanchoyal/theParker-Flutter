@@ -3,7 +3,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - geolocator (5.0.1):
+  - geolocator (5.1.4):
     - Flutter
   - google_api_availability (2.0.1):
     - Flutter
@@ -15,7 +15,7 @@ PODS:
   - GoogleMaps/Base (2.7.0)
   - GoogleMaps/Maps (2.7.0):
     - GoogleMaps/Base
-  - location_permissions (2.0.2):
+  - location_permissions (2.0.3):
     - Flutter
   - path_provider (0.0.1):
     - Flutter
@@ -33,7 +33,7 @@ DEPENDENCIES:
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - FMDB
     - GoogleMaps
 
@@ -54,16 +54,16 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sqflite/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  geolocator: f3dd3b5b1761a15a4da00665774c5a8319e657d6
+  geolocator: c98cc4a1f2558c11fa5db0fccad80883cde6eb4f
   google_api_availability: 163b30f802e6148c67f092aa4501c90ddd8eec8d
   google_maps_flutter: 78a52114c898b42ea647919679a4c58b70abe876
   GoogleMaps: f79af95cb24d869457b1f961c93d3ce8b2f3b848
-  location_permissions: 67cfaff583afbb027a9f9248196f4b79c40f3cdc
+  location_permissions: 195ff2a1182fa9029ef3f2653156961ee5a1e40b
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   sqflite: ff1d9da63c06588cc8d1faf7256d741f16989d5a
 
-PODFILE CHECKSUM: aff02bfeed411c636180d6812254b2daeea14d09
+PODFILE CHECKSUM: 10ae9c18d12c9ffc2275c9a159a3b1e281990db0
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.8.3

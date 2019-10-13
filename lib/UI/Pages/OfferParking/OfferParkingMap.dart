@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:flare_dart/math/mat2d.dart';
-import 'package:flare_flutter/flare.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flare_flutter/flare_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/plugin_api.dart';
@@ -11,7 +8,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mapbox_search/mapbox_search.dart';
 import 'package:the_parker/UI/Pages/OfferParking/AddressPage.dart';
-import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
 
@@ -179,13 +175,24 @@ class _OfferParkingMapState extends State<OfferParkingMap>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonAnimator: NoScalingAnimation(),
+      floatingActionButtonLocation: markers.length > 0
+          ? FloatingActionButtonLocation.centerFloat
+          : FloatingActionButtonLocation.endFloat,
       floatingActionButton: markers.length > 0
           ? FloatingActionButton.extended(
               // heroTag: 'sdsa',
               backgroundColor: Theme.of(context).canvasColor,
               onPressed: () async {
                 print(markers.first.point);
-                kopenPage(context, AddressPage());
+                kopenPage(
+                    context,
+                    AddressPage(
+                      location: Location(
+                        lat: markers.first.point.latitude,
+                        lng: markers.first.point.longitude,
+                      ),
+                    ));
                 // LatLng point = markers.first.point;
                 // ReverseGeoCoding geoCoding = ReverseGeoCoding(
                 //   apiKey: APIKeys.map_box_key,
@@ -385,38 +392,24 @@ class _OfferParkingMapState extends State<OfferParkingMap>
   }
 }
 
-// class EndLoopController implements FlareController {
-//   final String _animation;
-//   final double _loopAmount;
-//   final double _mix;
+class NoScalingAnimation extends FloatingActionButtonAnimator {
+  double _x;
+  double _y;
+  @override
+  Offset getOffset({Offset begin, Offset end, double progress}) {
+    _x = begin.dx + (end.dx - begin.dx) * progress;
+    _y = begin.dy + (end.dy - begin.dy) * progress;
+    return Offset(_x, _y);
+  }
 
-//   double _duration = 0.0;
-//   ActorAnimation _actor;
+  @override
+  Animation<double> getRotationAnimation({Animation<double> parent}) {
+    return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
+  }
 
-//   EndLoopController(this._animation, this._loopAmount, [this._mix = 0.5]);
-
-//   @override
-//   void initialize(FlutterActorArtboard artboard) {
-//     _actor = artboard.getAnimation(_animation);
-//   }
-
-//   @override
-//   bool advance(FlutterActorArtboard artboard, double elapsed) {
-//     _duration += elapsed;
-
-//     if (_duration > _actor.duration) {
-//       final double loopStart = _actor.duration - _loopAmount;
-//       final double loopProgress = _duration - _actor.duration;
-//       _duration = loopStart + loopProgress;
-//     }
-//     _actor.apply(_duration, artboard, _mix);
-//     return true;
-//   }
-
-//   @override
-//   ValueNotifier<bool> isActive;
-
-//   @override
-//   void setViewTransform(Mat2D viewTransform) {
-//   }
+  @override
+  Animation<double> getScaleAnimation({Animation<double> parent}) {
+    return Tween<double>(begin: 1.0, end: 1.0).animate(parent);
+  }
+}
 // }
