@@ -55,20 +55,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
-                  ReusableRoundedButton(
-                    elevation: 5,
-                    child: Text(
-                      Kstrings.send_recovery_mail,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 15,
-                      ),
-                    ),
-                    onPressed: () {
-                      //Sent Password reset link logic
-                    },
-                    height: 50,
-                  ),
+                  FloatingActionButton.extended(
+                          heroTag: 'needHelp',
+                          label: Text(
+                            Kstrings.send_recovery_mail,
+                            style: ktitleStyle,
+                          ),
+                          onPressed: () {
+                            //Forget Password Logic
+                            kopenPage(context, ForgotPasswordPage());
+                          },
+                          // height: 40,
+                        ),
                 ],
               ),
             ),

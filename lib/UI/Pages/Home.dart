@@ -5,12 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mapbox_search/mapbox_search.dart';
+import 'package:mapbox_search_flutter/mapbox_search_flutter.dart';
 import 'package:the_parker/UI/Pages/OfferParking/OfferParkingMap.dart';
 import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
 import 'MapPage.dart';
+import 'package:color/color.dart';
 
 // class ParallexCardItemssNew extends ParallaxCardItem {
 //   ParallexCardItemssNew({
@@ -97,17 +99,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     animationControllerProfile.forward();
   }
 
-  MapBoxStaticImage staticImage =
-      MapBoxStaticImage(apiKey: APIKeys.map_box_key);
+  StaticImage staticImage = StaticImage(apiKey: APIKeys.map_box_key);
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
     return ExtendedNavigationBarScaffold(
       elevation: 0,
       searchWidget: builtSearchBar(),
+      // searchWidget: Container(
+      //   height: 10,
+      //   color: Colors.red,
+      // ),
       body: Stack(
         children: <Widget>[
           MapPage(),
+          // Container(
+          //   color: Colors.blue,
+          // ),
           ProfilePage(
             currentSearchPercent: currentProfilePercent,
           ),
@@ -217,26 +225,20 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               String mapStaticImageUrl = staticImage.getStaticUrlWithPolyline(
                 point1: Location(lat: 37.77343, lng: -122.46589),
                 point2: Location(lat: 37.75965, lng: -122.42816),
+                center: Location(lat: 0.0, lng: 0.0),
                 marker1: MapBoxMarker(
-                    markerColor: Colors.black,
-                    markerLetter: 'p',
-                    markerSize: MarkerSize.LARGE),
-                msrker2: MapBoxMarker(
-                    markerColor: Colors.redAccent,
+                    markerColor: Color.rgb(0, 0, 0),
+                    markerLetter: MakiIcons.airport.value,
+                    markerSize: MarkerSize.SMALL),
+                marker2: MapBoxMarker(
+                    markerColor: Color.rgb(244, 67, 54),
                     markerLetter: 'q',
                     markerSize: MarkerSize.SMALL),
                 height: 300,
-                width: 600,
-                zoomLevel: 16,
-                style: MapBoxStyle.Mapbox_Streets,
-                path: MapBoxPath(
-                  pathColor: Colors.black,
-                  pathOpacity: 0.5,
-                  pathWidth: 5,
-                  pathPolyline:
-                      "%7DrpeFxbnjVsFwdAvr@cHgFor@jEmAlFmEMwM_FuItCkOi@wc@bg@wBSgM",
-                ),
+                width: 500,
+                style: MapBoxStyle.Streets,
                 render2x: true,
+                auto: true,
               );
               var background = Image.network(
                 mapStaticImageUrl,
@@ -248,6 +250,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 item: ParallaxCardItem(
                   body: item.body,
                   background: background,
+                  // background: Container(
+                  //   color: Colors.red,
+                  // ),
+                  // background: background,
                   title: item.title,
                 ),
                 pageVisibility: pageVisibility,
@@ -300,11 +306,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       padding: const EdgeInsets.only(bottom: 5),
       child: MapBoxPlaceSearchWidget(
         apiKey: APIKeys.map_box_key,
-        limit: 10,
+        // limit: 10,
         context: context,
         popOnSelect: false,
+        // height: 100,
         height: 290,
-        language: 'en',
+        // language: 'en',
         // location: LatLng(location.latitude, location.longitude),
         onSelected: (MapBoxPlace place) async {
           print(place.center);

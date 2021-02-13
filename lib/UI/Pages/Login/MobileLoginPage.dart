@@ -17,7 +17,7 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       appBar: TopBar(
         title: Kstrings.mobile,
         child: kBackBtn,
@@ -103,28 +103,28 @@ class _MobileLoginPageState extends State<MobileLoginPage> {
                     ),
                     // Hero(
                     //   tag: 'otpForget',
-                    //   child: 
-                      Container(
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: FloatingActionButton.extended(
-                            heroTag: 'needHelp',
-                            label: Text(
-                              Kstrings.send_otp,
-                              style: ktitleStyle,
-                            ),
-                            // text: "Forgot Pass?",
-                            onPressed: () {
-                              setState(() {
-                                isEnabled = !isEnabled;
-                              });
-                            },
-                            // height: 40,
+                    //   child:
+                    Container(
+                      height: 50,
+                      width: MediaQuery.of(context).size.width,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: FloatingActionButton.extended(
+                          heroTag: 'needHelp',
+                          label: Text(
+                            Kstrings.send_otp,
+                            style: ktitleStyle,
                           ),
+                          // text: "Forgot Pass?",
+                          onPressed: () {
+                            setState(() {
+                              isEnabled = !isEnabled;
+                            });
+                          },
+                          // height: 40,
                         ),
                       ),
+                    ),
                     // ),
                     SizedBox(
                       height: 100,

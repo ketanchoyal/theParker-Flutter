@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -33,13 +32,13 @@ class MapPageState extends State<MapPage> {
   void didUpdateWidget(Widget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    setState(() {
-      _lastKnownPosition = null;
-      _currentPosition = null;
-    });
+    // setState(() {
+    //   _lastKnownPosition = null;
+    //   _currentPosition = null;
+    // });
 
-    _initLastKnownLocation();
-    _initCurrentLocation();
+    // _initLastKnownLocation();
+    // _initCurrentLocation();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -48,11 +47,9 @@ class MapPageState extends State<MapPage> {
     final GoogleMapController controller = await _controller.future;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = !androidFusedLocation;
-      position = await geolocator.getLastKnownPosition(
-          desiredAccuracy: LocationAccuracy.best);
-    } on PlatformException {
+      // ..forceAndroidLocationManager = !androidFusedLocation;
+      position = await Geolocator.getLastKnownPosition();
+    } on Exception {
       position = null;
     }
 
@@ -84,27 +81,24 @@ class MapPageState extends State<MapPage> {
   // Platform messages are asynchronous, so we initialize in an async method.
   _initCurrentLocation() async {
     final GoogleMapController controller = await _controller.future;
-    Geolocator()
-      ..forceAndroidLocationManager = !androidFusedLocation
-      ..getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-      ).then((position) {
-        if (mounted) {
-          setState(() {
-            _add(position);
-            _currentPosition = CameraPosition(
-              target: LatLng(position.latitude, position.longitude),
-              zoom: 16,
-            );
-
-            controller.animateCamera(
-              CameraUpdate.newCameraPosition(_currentPosition),
-            );
-          });
-        }
-      }).catchError((e) {
-        //
-      });
+    Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    ).then((position) {
+      if (mounted) {
+        setState(() {
+          _add(position);
+          _currentPosition = CameraPosition(
+            target: LatLng(position.latitude, position.longitude),
+            zoom: 16,
+          );
+          controller.animateCamera(
+            CameraUpdate.newCameraPosition(_currentPosition),
+          );
+        });
+      }
+    }).catchError((e) {
+      //
+    });
   }
 
   _gotoMyLocation() async {
@@ -174,12 +168,24 @@ class MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: FutureBuilder<GeolocationStatus>(
-          future: Geolocator().checkGeolocationPermissionStatus(),
+      body: FutureBuilder<LocationPermission>(
+          future: Geolocator.checkPermission(),
           builder: (BuildContext context,
-              AsyncSnapshot<GeolocationStatus> snapshot) {
+              AsyncSnapshot<LocationPermission> snapshot) {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
+            }
+            if (snapshot.data == LocationPermission.denied ||
+                snapshot.data == LocationPermission.deniedForever) {
+              return Center(
+                child: TextButton(
+                  onPressed: () async {
+                    await Geolocator.requestPermission();
+                    setState(() {});
+                  },
+                  child: Text("Grant Permission"),
+                ),
+              );
             }
             return Stack(
               children: <Widget>[
@@ -193,7 +199,10 @@ class MapPageState extends State<MapPage> {
                   //       () => TapGestureRecognizer()))
                   //   ..add(Factory<VerticalDragGestureRecognizer>(
                   //       () => VerticalDragGestureRecognizer())),
-                  mapType: MapType.normal,
+                  buildingsEnabled: true,
+                  indoorViewEnabled: true,
+                  scrollGesturesEnabled: true,
+                  mapType: MapType.terrain,
                   compassEnabled: true,
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
@@ -203,9 +212,9 @@ class MapPageState extends State<MapPage> {
                   onMapCreated: (GoogleMapController controller) {
                     _controller.complete(controller);
                   },
-                  onCameraMove: (CameraPosition position) {
-                    CameraUpdate.newCameraPosition(position);
-                  },
+                  // onCameraMove: (CameraPosition position) {
+                  //   CameraUpdate.newCameraPosition(position);
+                  // },
                   // markers: Set<Marker>.of(markers.values),
                 ),
 

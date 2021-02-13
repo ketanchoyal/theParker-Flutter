@@ -1,15 +1,18 @@
 import 'dart:async';
+
+import 'package:color/color.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flare_flutter/flare_actor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mapbox_search/mapbox_search.dart';
 import 'package:the_parker/UI/Pages/OfferParking/AddressPage.dart';
+import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
+import 'package:user_location/user_location.dart';
 
 class OfferParkingMap extends StatefulWidget {
   OfferParkingMap({Key key}) : super(key: key);
@@ -20,6 +23,7 @@ class OfferParkingMap extends StatefulWidget {
 class _OfferParkingMapState extends State<OfferParkingMap>
     with TickerProviderStateMixin {
   LatLng _initialCamera = LatLng(51.5, -0.09);
+  UserLocationOptions userLocationOptions;
 
   MapController _controller;
 
@@ -64,7 +68,7 @@ class _OfferParkingMapState extends State<OfferParkingMap>
 
   Stream<Position> _realtimeLocationStream() {
     Stream<Position> positionStream =
-        Geolocator().getPositionStream().asBroadcastStream();
+        Geolocator.getPositionStream().asBroadcastStream();
     positionStream.listen((Position pos) {
       _lastKnownPosition = _currentPosition;
       _currentPosition = LatLng(pos.latitude, pos.longitude);
@@ -108,11 +112,8 @@ class _OfferParkingMapState extends State<OfferParkingMap>
     Position position;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      final Geolocator geolocator = Geolocator()
-        ..forceAndroidLocationManager = !androidFusedLocation;
-      position = await geolocator.getLastKnownPosition(
-          desiredAccuracy: LocationAccuracy.best);
-    } on PlatformException {
+      position = await Geolocator.getLastKnownPosition();
+    } on Exception {
       position = null;
     }
 
@@ -140,20 +141,18 @@ class _OfferParkingMapState extends State<OfferParkingMap>
 
   // Platform messages are asynchronous, so we initialize in an async method.
   _initCurrentLocation() async {
-    Geolocator()
-      ..forceAndroidLocationManager = !androidFusedLocation
-      ..getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-      ).then((position) {
-        if (mounted) {
-          setState(() {
-            _currentPosition = LatLng(position.latitude, position.longitude);
-            _animatedMapMove(_currentPosition, 16);
-          });
-        }
-      }).catchError((e) {
-        //
-      });
+    Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    ).then((position) {
+      if (mounted) {
+        setState(() {
+          _currentPosition = LatLng(position.latitude, position.longitude);
+          _animatedMapMove(_currentPosition, 16);
+        });
+      }
+    }).catchError((e) {
+      //
+    });
   }
 
   _gotoMyLocation() async {
@@ -173,7 +172,15 @@ class _OfferParkingMapState extends State<OfferParkingMap>
   double zoom = 8;
 
   @override
-  Widget build(BuildContext context) {
+  build(BuildContext context) {
+    userLocationOptions = UserLocationOptions(
+      context: context,
+      mapController: _controller,
+      zoomToCurrentLocationOnLoad: false,
+      updateMapLocationOnPositionChange: false,
+      showMoveToCurrentLocationFloatingActionButton: false,
+      markers: markers,
+    );
     return Scaffold(
       floatingActionButtonAnimator: NoScalingAnimation(),
       floatingActionButtonLocation: markers.length > 0
@@ -185,32 +192,32 @@ class _OfferParkingMapState extends State<OfferParkingMap>
               backgroundColor: Theme.of(context).canvasColor,
               onPressed: () async {
                 print(markers.first.point);
-                kopenPage(
-                    context,
-                    AddressPage(
-                      location: Location(
-                        lat: markers.first.point.latitude,
-                        lng: markers.first.point.longitude,
-                      ),
-                    ));
-                // LatLng point = markers.first.point;
-                // ReverseGeoCoding geoCoding = ReverseGeoCoding(
-                //   apiKey: APIKeys.map_box_key,
-                //   // limit: 5,
-                //   // location: Location(
-                //   //   lat: point.latitude,
-                //   //   lng: point.longitude,
-                //   // ),
-                // );
+                // kopenPage(
+                //     context,
+                //     AddressPage(
+                //       location: Location(
+                //         lat: markers.first.point.latitude,
+                //         lng: markers.first.point.longitude,
+                //       ),
+                //     ));
+                LatLng point = markers.first.point;
+                ReverseGeoCoding geoCoding = ReverseGeoCoding(
+                  apiKey: APIKeys.map_box_key,
+                  limit: 5,
+                  location: Location(
+                    lat: point.latitude,
+                    lng: point.longitude,
+                  ),
+                );
 
-                // var predection = await geoCoding.getAddress(
-                //   Location(
-                //     lat: point.latitude,
-                //     lng: point.longitude,
-                //   ),
-                // );
+                var predection = await geoCoding.getAddress(
+                  Location(
+                    lat: point.latitude,
+                    lng: point.longitude,
+                  ),
+                );
 
-                // print(predection.length);
+                print(predection.first.placeName);
               },
               label: Text(
                 'Next',
@@ -218,7 +225,7 @@ class _OfferParkingMapState extends State<OfferParkingMap>
               ),
               icon: Icon(
                 EvaIcons.arrowIosForward,
-                color: Theme.of(context).textTheme.body1.color,
+                color: Theme.of(context).textTheme.bodyText2.color,
               ),
             )
           : FloatingActionButton(
@@ -231,12 +238,12 @@ class _OfferParkingMapState extends State<OfferParkingMap>
               isExtended: markers.length > 0,
               child: Icon(
                 Icons.location_searching,
-                color: Theme.of(context).textTheme.body1.color,
+                color: Theme.of(context).textTheme.bodyText2.color,
               ),
             ),
       body: Stack(
         children: <Widget>[
-          buildMap(context),
+          buildMap(),
           FloatingAppbar(
             title: 'Long Tap to select parking Space',
           )
@@ -245,7 +252,7 @@ class _OfferParkingMapState extends State<OfferParkingMap>
     );
   }
 
-  Widget buildMap(BuildContext context) {
+  buildMap() {
     return StreamBuilder<Position>(
         stream: _realtimeLocationStream(),
         builder: (context, snapshot) {
@@ -264,14 +271,19 @@ class _OfferParkingMapState extends State<OfferParkingMap>
                       markers.clear();
                       setState(() {});
                     },
+                    plugins: [
+                      UserLocationPlugin(),
+                    ],
                     onPositionChanged: (positon, b) {
                       _zoom.add(_controller.zoom);
                     },
                     onTap: (location) {
                       addMarkerInList(
                         _buildAnimatedLocationMarker(
-                          color: Colors.red,
-                          colorAccent: Colors.redAccent,
+                          color: Color.rgb(Colors.red.red, Colors.red.green,
+                              Colors.red.blue),
+                          colorAccent: Color.rgb(Colors.redAccent.red,
+                              Colors.redAccent.green, Colors.redAccent.blue),
                           location: location,
                         ),
                       );
@@ -281,91 +293,98 @@ class _OfferParkingMapState extends State<OfferParkingMap>
                   ),
                   layers: [
                     TileLayerOptions(
+                      // urlTemplate:
+                      //     'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                      // urlTemplate:
+                      //     "https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token=${APIKeys.map_box_key}",
                       urlTemplate:
-                          'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-                      // urlTemplate: 'http://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-                      subdomains: ['mt0', 'mt1', 'mt2', 'mt3'],
-                      maxZoom: 22,
+                          "https://api.mapbox.com/styles/v1/parkingsystem/ckl2tb50f1rh817obnlzr0f0b/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
+                      additionalOptions: {
+                        'accessToken': APIKeys.map_box_key,
+                      },
+                      subdomains: ['a', 'b', 'c'],
+                      maxZoom: 20,
                       zoomReverse: true,
                     ),
-                    MarkerLayerOptions(
-                      markers: [
-                        _buildLocationMarker(),
-                      ],
-                    ),
+                    // MarkerLayerOptions(
+                    //   markers: [
+                    //     _buildLocationMarker(),
+                    //   ],
+                    // ),
                     MarkerLayerOptions(
                       markers: markers,
                     ),
+                    userLocationOptions,
                   ],
                 );
               });
         });
   }
 
-  Marker _buildLocationMarker({
-    Color color,
-    Color colorAccent,
-    LatLng location,
-  }) {
-    return Marker(
-      width: zoom > 8 ? 18 + zoom : 28,
-      height: zoom > 8 ? 18 + zoom : 28,
-      point:
-          location ?? _currentPosition ?? _lastKnownPosition ?? _initialCamera,
-      builder: (ctx) => Container(
-        // height: 40,
-        // width: 40,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(
-              50,
-            ),
-          ),
-          gradient: RadialGradient(
-            colors: [
-              color ?? Colors.blue,
-              color == null
-                  ? Colors.blue.withOpacity(0.5)
-                  : color.withOpacity(0.5),
-            ],
-            center: Alignment.center,
-            tileMode: TileMode.clamp,
-          ),
-        ),
-        child: Container(
-          height: 20,
-          width: 20,
-          padding: EdgeInsets.all(2),
-          child: Card(
-            elevation: 10,
-            color: colorAccent ?? color ?? Colors.blueAccent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(
-                  30,
-                ),
-              ),
-            ),
-            child: Container(
-              decoration: BoxDecoration(
-                color: colorAccent ?? color ?? Colors.blueAccent,
-                border: Border.all(
-                  color: Colors.white,
-                  style: BorderStyle.solid,
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(
-                    50,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+  // Marker _buildLocationMarker({
+  //   Color color,
+  //   Color colorAccent,
+  //   LatLng location,
+  // }) {
+  //   return Marker(
+  //     width: zoom > 8 ? 18 + zoom : 28,
+  //     height: zoom > 8 ? 18 + zoom : 28,
+  //     point:
+  //         location ?? _currentPosition ?? _lastKnownPosition ?? _initialCamera,
+  //     builder: (ctx) => Container(
+  //       // height: 40,
+  //       // width: 40,
+  //       decoration: BoxDecoration(
+  //         borderRadius: BorderRadius.all(
+  //           Radius.circular(
+  //             50,
+  //           ),
+  //         ),
+  //         gradient: RadialGradient(
+  //           colors: [
+  //             color ?? Colors.blue,
+  //             color == null ? Colors.blue.withOpacity(0.5) : color,
+  //             //TODO: Find a way to add opacity here
+  //             // : color.withOpacity(0.5),
+  //           ],
+  //           center: Alignment.center,
+  //           tileMode: TileMode.clamp,
+  //         ),
+  //       ),
+  //       child: Container(
+  //         height: 20,
+  //         width: 20,
+  //         padding: EdgeInsets.all(2),
+  //         child: Card(
+  //           elevation: 10,
+  //           color: colorAccent ?? color ?? Colors.blueAccent,
+  //           shape: RoundedRectangleBorder(
+  //             borderRadius: BorderRadius.all(
+  //               Radius.circular(
+  //                 30,
+  //               ),
+  //             ),
+  //           ),
+  //           child: Container(
+  //             decoration: BoxDecoration(
+  //               color: colorAccent ?? color ?? Colors.blueAccent,
+  //               border: Border.all(
+  //                 color: Colors.white,
+  //                 style: BorderStyle.solid,
+  //                 width: 2,
+  //               ),
+  //               borderRadius: BorderRadius.all(
+  //                 Radius.circular(
+  //                   50,
+  //                 ),
+  //               ),
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 
   Marker _buildAnimatedLocationMarker({
     Color color,

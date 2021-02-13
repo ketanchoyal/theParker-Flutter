@@ -7,7 +7,7 @@ import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/LiquidSwipe/Animation_Gesture/animated_page_dragger.dart';
 import 'package:the_parker/UI/Widgets/LiquidSwipe/Animation_Gesture/page_dragger.dart';
 import 'package:the_parker/UI/Widgets/LiquidSwipe/Constants/constants.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/page.dart';
+import 'package:the_parker/UI/Widgets/LiquidSwipe/page.dart' as P;
 
 import 'Animation_Gesture/page_reveal.dart';
 
@@ -139,10 +139,10 @@ class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
     List<Container> pages = widget.pages;
     return Scaffold(
       //Stack is used to place components over one another.
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: <Widget>[
-          Page(
+          P.Page(
             pageView: slideDirection == SlideDirection.leftToRight
                 ? pages[activePageIndex]
                 : pages[nextPageIndex],
@@ -152,7 +152,7 @@ class _LiquidSwipe extends State<LiquidSwipe> with TickerProviderStateMixin {
           PageReveal(
             //next page reveal
             revealPercent: slidePercent,
-            child: Page(
+            child: P.Page(
                 pageView: slideDirection == SlideDirection.leftToRight
                     ? pages[nextPageIndex]
                     : pages[activePageIndex],

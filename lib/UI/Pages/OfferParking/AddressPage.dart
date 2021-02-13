@@ -1,9 +1,11 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:mapbox_search/mapbox_search.dart';
+import 'package:the_parker/UI/Pages/OfferParking/ParkingSpotDetailPage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
+import 'package:color/color.dart';
 
 class AddressPage extends StatefulWidget {
   const AddressPage({
@@ -17,21 +19,23 @@ class AddressPage extends StatefulWidget {
 }
 
 class _AddressPageState extends State<AddressPage> {
-  MapBoxStaticImage staticImage =
-      MapBoxStaticImage(apiKey: APIKeys.map_box_key);
+  StaticImage staticImage = StaticImage(apiKey: APIKeys.map_box_key);
 
-  String getImageUrl() => staticImage.getStaticUrlWithMarker(
-        marker: MapBoxMarker(
-            markerColor: Colors.black,
-            markerLetter: 'p',
-            markerSize: MarkerSize.LARGE),
-        center: widget.location,
-        height: 300,
-        width: 600,
-        zoomLevel: 15,
-        style: MapBoxStyle.Mapbox_Outdoors,
-        render2x: true,
-      );
+  String getImageUrl() {
+    var color = Colors.black;
+    return staticImage.getStaticUrlWithMarker(
+      marker: MapBoxMarker(
+          markerColor: Color.rgb(color.red, color.green, color.blue),
+          markerLetter: 'p',
+          markerSize: MarkerSize.LARGE),
+      center: widget.location,
+      height: 900,
+      width: 600,
+      zoomLevel: 15,
+      style: MapBoxStyle.Outdoors,
+      render2x: true,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +48,9 @@ class _AddressPageState extends State<AddressPage> {
           'Next',
           style: ksubtitleStyle,
         ),
-        onPressed: () {},
+        onPressed: () {
+          kopenPage(context, ParkingSpotDetailsPage());
+        },
       ),
       body: Stack(
         children: <Widget>[
@@ -52,9 +58,10 @@ class _AddressPageState extends State<AddressPage> {
             top: 0,
             left: 0,
             right: 0,
+            bottom: 0,
             child: Container(
               height: MediaQuery.of(context).size.height * 0.35,
-              // color: Colors.wh,
+              // color: Colors.red,
               child: Image.network(
                 getImageUrl(),
                 fit: BoxFit.cover,
@@ -62,10 +69,20 @@ class _AddressPageState extends State<AddressPage> {
             ),
           ),
           Positioned(
-            top: MediaQuery.of(context).size.height * 0.35 + 20,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            child: Container(
+              height: MediaQuery.of(context).size.height * 0.35,
+              color: Theme.of(context).primaryColor.withOpacity(0.7),
+            ),
+          ),
+          Positioned(
+            // top: MediaQuery.of(context).size.height * 0.15,
             left: 10,
             right: 10,
-            bottom: 5,
+            bottom: MediaQuery.of(context).size.height * 0.1,
             child: Container(
               // color: Colors.red,
               child: Column(

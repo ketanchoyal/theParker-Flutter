@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:the_parker/UI/Resources/Resources.dart';
 import 'UI/Pages/WelcomePage/WelcomeScreen.dart';
 
 void main() {
@@ -31,10 +30,10 @@ class _MyAppState extends State<MyApp> {
               // primaryColor: Kcolors.primary,
               // primaryColorDark: Kcolors.primaryDark,
               // primarySwatch: Colors.deepOrange,
-              
+              primaryColor: Colors.black,
               brightness: Brightness.dark,
               accentColor: Colors.black,
-              canvasColor: Colors.black,
+              // canvasColor: Colors.white12,
             )
           : ThemeData(
               fontFamily: 'K2D',
