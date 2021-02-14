@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Pages/Login/LoginPage.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/liquid_swipe.dart';
+import 'package:stacked/stacked.dart';
+import 'package:the_parker/ui/Resources/ConstantMethods.dart';
+import 'package:the_parker/ui/Widgets/LiquidSwipe/liquid_swipe.dart';
+import 'package:the_parker/ui/views/login/login_view.dart';
+import './welcome_viewmodel.dart';
 import 'IntroPage.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeView extends StatefulWidget {
+  @override
+  _WelcomeViewState createState() => _WelcomeViewState();
+}
+
+class _WelcomeViewState extends State<WelcomeView> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: LiquidSwipe(
-        pages: pages(context),
-        widget: Positioned(
+    return ViewModelBuilder<WelcomeViewModel>.reactive(
+      viewModelBuilder: () => WelcomeViewModel(),
+      builder: (context, model, child) => Scaffold(
+        body: LiquidSwipe(
+          pages: pages(context),
+          widget: Positioned(
             bottom: MediaQuery.of(context).size.height * 0.12,
             width: MediaQuery.of(context).size.width,
             // left: MediaQuery.of(context).size.width/2 - 40,
@@ -24,7 +33,7 @@ class WelcomeScreen extends StatelessWidget {
                   minWidth: MediaQuery.of(context).size.width - 100,
                   elevation: 0,
                   onPressed: () {
-                    kopenPage(context, LoginPage());
+                    kopenPage(context, LoginView());
                   },
                   color: Colors.white,
                   child: Text(
@@ -39,6 +48,7 @@ class WelcomeScreen extends StatelessWidget {
               ),
             ),
           ),
+        ),
       ),
     );
   }

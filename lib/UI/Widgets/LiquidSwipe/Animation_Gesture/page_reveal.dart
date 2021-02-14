@@ -20,12 +20,13 @@ class PageReveal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //ClipPath clips our Container (page) with clipper based on path..
-    return new ClipPath(
-      clipper: new WaveLayer(
-          revealPercent: slideDirection == SlideDirection.leftToRight
-              ? 1.0 - revealPercent
-              : revealPercent,
-          slideDirection: slideDirection),
+    return ClipPath(
+      clipper: WaveLayer(
+        revealPercent: slideDirection == SlideDirection.leftToRight
+            ? 1.0 - revealPercent
+            : revealPercent,
+        slideDirection: slideDirection,
+      ),
       child: child,
     );
   }

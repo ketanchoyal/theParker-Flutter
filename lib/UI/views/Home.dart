@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_vector_icons/flutter_vector_icons.dart';
 import 'package:mapbox_search/mapbox_search.dart';
 import 'package:mapbox_search_flutter/mapbox_search_flutter.dart';
-import 'package:the_parker/UI/Pages/OfferParking/OfferParkingMap.dart';
-import 'package:the_parker/UI/Pages/ProfilePage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/ProfileWidget.dart';
+import 'package:the_parker/ui/views/offer_parking_map/offer_parking_map_view.dart';
 import 'MapPage.dart';
 import 'package:color/color.dart';
+import 'ProfilePage.dart';
 
 // class ParallexCardItemssNew extends ParallaxCardItem {
 //   ParallexCardItemssNew({
@@ -196,7 +196,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           onTap: () {
             kopenPage(
               context,
-              OfferParkingMap(),
+              OfferParkingMapView(),
             );
           },
         ),

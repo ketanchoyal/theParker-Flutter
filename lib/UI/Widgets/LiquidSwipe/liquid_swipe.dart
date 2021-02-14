@@ -2,14 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:the_parker/UI/Pages/Login/LoginPage.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/Animation_Gesture/animated_page_dragger.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/Animation_Gesture/page_dragger.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/Constants/constants.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/page.dart' as P;
-
+import 'Animation_Gesture/animated_page_dragger.dart';
+import 'Animation_Gesture/page_dragger.dart';
 import 'Animation_Gesture/page_reveal.dart';
+import 'Constants/constants.dart';
+import 'page.dart' as P;
 
 class LiquidSwipe extends StatefulWidget {
   final List<Container> pages;

@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Widgets/LiquidSwipe/Constants/constants.dart';
-
+import 'package:the_parker/ui/widgets/LiquidSwipe/Constants/constants.dart';
 import '../liquid_swipe.dart';
 
 /// This class is used to get user gesture and work according to it.

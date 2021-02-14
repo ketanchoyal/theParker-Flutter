@@ -1,3 +1,7 @@
+import 'package:flutter/material.dart';
+import 'package:stacked/stacked.dart';
+import './offer_parking_map_viewmodel.dart';
+
 import 'dart:async';
 
 import 'package:color/color.dart';
@@ -8,19 +12,18 @@ import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mapbox_search/mapbox_search.dart';
-import 'package:the_parker/UI/Pages/OfferParking/AddressPage.dart';
 import 'package:the_parker/UI/Resources/APIKeys.dart';
 import 'package:the_parker/UI/Resources/ConstantMethods.dart';
 import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
 import 'package:user_location/user_location.dart';
 
-class OfferParkingMap extends StatefulWidget {
-  OfferParkingMap({Key key}) : super(key: key);
+class OfferParkingMapView extends StatefulWidget {
+  OfferParkingMapView({Key key}) : super(key: key);
 
-  _OfferParkingMapState createState() => _OfferParkingMapState();
+  _OfferParkingMapViewState createState() => _OfferParkingMapViewState();
 }
 
-class _OfferParkingMapState extends State<OfferParkingMap>
+class _OfferParkingMapViewState extends State<OfferParkingMapView>
     with TickerProviderStateMixin {
   LatLng _initialCamera = LatLng(51.5, -0.09);
   UserLocationOptions userLocationOptions;
@@ -181,75 +184,79 @@ class _OfferParkingMapState extends State<OfferParkingMap>
       showMoveToCurrentLocationFloatingActionButton: false,
       markers: markers,
     );
-    return Scaffold(
-      floatingActionButtonAnimator: NoScalingAnimation(),
-      floatingActionButtonLocation: markers.length > 0
-          ? FloatingActionButtonLocation.centerFloat
-          : FloatingActionButtonLocation.endFloat,
-      floatingActionButton: markers.length > 0
-          ? FloatingActionButton.extended(
-              // heroTag: 'sdsa',
-              backgroundColor: Theme.of(context).canvasColor,
-              onPressed: () async {
-                print(markers.first.point);
-                // kopenPage(
-                //     context,
-                //     AddressPage(
-                //       location: Location(
-                //         lat: markers.first.point.latitude,
-                //         lng: markers.first.point.longitude,
-                //       ),
-                //     ));
-                LatLng point = markers.first.point;
-                ReverseGeoCoding geoCoding = ReverseGeoCoding(
-                  apiKey: APIKeys.map_box_key,
-                  limit: 5,
-                  location: Location(
-                    lat: point.latitude,
-                    lng: point.longitude,
+    return ViewModelBuilder<OfferParkingMapViewModel>.reactive(
+        viewModelBuilder: () => OfferParkingMapViewModel(),
+        builder: (context, model, child) {
+          return Scaffold(
+            floatingActionButtonAnimator: NoScalingAnimation(),
+            floatingActionButtonLocation: markers.length > 0
+                ? FloatingActionButtonLocation.centerFloat
+                : FloatingActionButtonLocation.endFloat,
+            floatingActionButton: markers.length > 0
+                ? FloatingActionButton.extended(
+                    // heroTag: 'sdsa',
+                    backgroundColor: Theme.of(context).canvasColor,
+                    onPressed: () async {
+                      print(markers.first.point);
+                      // kopenPage(
+                      //     context,
+                      //     AddressPage(
+                      //       location: Location(
+                      //         lat: markers.first.point.latitude,
+                      //         lng: markers.first.point.longitude,
+                      //       ),
+                      //     ));
+                      LatLng point = markers.first.point;
+                      ReverseGeoCoding geoCoding = ReverseGeoCoding(
+                        apiKey: APIKeys.map_box_key,
+                        limit: 5,
+                        location: Location(
+                          lat: point.latitude,
+                          lng: point.longitude,
+                        ),
+                      );
+
+                      var predection = await geoCoding.getAddress(
+                        Location(
+                          lat: point.latitude,
+                          lng: point.longitude,
+                        ),
+                      );
+
+                      print(predection.first.placeName);
+                    },
+                    label: Text(
+                      'Next',
+                      style: ktitleStyle,
+                    ),
+                    icon: Icon(
+                      EvaIcons.arrowIosForward,
+                      color: Theme.of(context).textTheme.bodyText2.color,
+                    ),
+                  )
+                : FloatingActionButton(
+                    // heroTag: 'sdsa',
+                    backgroundColor: Theme.of(context).canvasColor,
+                    onPressed: () async {
+                      await _gotoMyLocation();
+                    },
+
+                    isExtended: markers.length > 0,
+                    child: Icon(
+                      Icons.location_searching,
+                      color: Theme.of(context).textTheme.bodyText2.color,
+                    ),
                   ),
-                );
-
-                var predection = await geoCoding.getAddress(
-                  Location(
-                    lat: point.latitude,
-                    lng: point.longitude,
-                  ),
-                );
-
-                print(predection.first.placeName);
-              },
-              label: Text(
-                'Next',
-                style: ktitleStyle,
-              ),
-              icon: Icon(
-                EvaIcons.arrowIosForward,
-                color: Theme.of(context).textTheme.bodyText2.color,
-              ),
-            )
-          : FloatingActionButton(
-              // heroTag: 'sdsa',
-              backgroundColor: Theme.of(context).canvasColor,
-              onPressed: () async {
-                await _gotoMyLocation();
-              },
-
-              isExtended: markers.length > 0,
-              child: Icon(
-                Icons.location_searching,
-                color: Theme.of(context).textTheme.bodyText2.color,
-              ),
+            body: Stack(
+              children: <Widget>[
+                buildMap(),
+                FloatingAppbar(
+                  title: 'Long Tap to select parking Space',
+                )
+              ],
             ),
-      body: Stack(
-        children: <Widget>[
-          buildMap(),
-          FloatingAppbar(
-            title: 'Long Tap to select parking Space',
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
 
   buildMap() {

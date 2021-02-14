@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'UI/Pages/WelcomePage/WelcomeScreen.dart';
+import 'package:the_parker/ui/views/welcome/welcome_view.dart';
 
 void main() {
   Provider.debugCheckInvalidValueType = null;
@@ -61,7 +61,7 @@ class _MyAppState extends State<MyApp> {
       //   accentColor: Colors.black,
       //   canvasColor: Colors.black,
       // ),
-      home: WelcomeScreen(),
+      home: WelcomeView(),
     );
   }
 }
