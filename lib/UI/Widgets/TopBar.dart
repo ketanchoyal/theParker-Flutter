@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
+import 'package:the_parker/ui/resources/ConstantMethods.dart';
 
 class TopBar extends StatefulWidget implements PreferredSizeWidget {
   final String title;

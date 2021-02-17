@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Resources/Resources.dart';
+import 'package:the_parker/ui/resources/resources.dart';
 
 List<Container> pages(BuildContext context) {
   return [
@@ -52,7 +52,8 @@ Container intro(BuildContext context, String heading, String subTitle,
               height: 10,
             ),
             Container(
-              padding: EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 10),
+              padding:
+                  EdgeInsets.only(bottom: 20, left: 20, right: 20, top: 10),
               child: Text(
                 subTitle,
                 textAlign: TextAlign.center,

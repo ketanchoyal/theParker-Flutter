@@ -27,8 +27,8 @@
 .pub/
 /build/
 APIKeys.dart
-lib/UI/Resources/APIKeys.dart
-**/lib/**/Resources/APIKeys.dart
+lib/UI/resources/APIKeys.dart
+**/lib/**/resources/APIKeys.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar
@@ -71,4 +71,4 @@ lib/UI/Resources/APIKeys.dart
 !**/ios/**/default.pbxuser
 !**/ios/**/default.perspectivev3
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
-lib/UI/Resources/APIKeys.dart
+lib/UI/resources/APIKeys.dart

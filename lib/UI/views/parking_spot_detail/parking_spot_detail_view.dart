@@ -3,11 +3,9 @@ import 'package:stacked/stacked.dart';
 import './parking_spot_detail_viewmodel.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Resources/Resources.dart';
-import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
+import 'package:the_parker/ui/resources/ConstantMethods.dart';
+import 'package:the_parker/ui/widgets/FloatingAppbar.dart';
 
 class ParkingSpotDetailView extends StatefulWidget {
   ParkingSpotDetailView({Key key}) : super(key: key);

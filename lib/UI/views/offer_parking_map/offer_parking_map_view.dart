@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:the_parker/ui/resources/APIKeys.dart';
+import 'package:the_parker/ui/resources/ConstantMethods.dart';
+import 'package:the_parker/ui/views/add_address/add_address_view.dart';
 import './offer_parking_map_viewmodel.dart';
 
 import 'dart:async';
@@ -7,14 +10,11 @@ import 'dart:async';
 import 'package:color/color.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flare_flutter/flare_actor.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_map/plugin_api.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong/latlong.dart';
 import 'package:mapbox_search/mapbox_search.dart';
-import 'package:the_parker/UI/Resources/APIKeys.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Widgets/FloatingAppbar.dart';
+import 'package:the_parker/ui/widgets/FloatingAppbar.dart';
 import 'package:user_location/user_location.dart';
 
 class OfferParkingMapView extends StatefulWidget {
@@ -198,14 +198,7 @@ class _OfferParkingMapViewState extends State<OfferParkingMapView>
                     backgroundColor: Theme.of(context).canvasColor,
                     onPressed: () async {
                       print(markers.first.point);
-                      // kopenPage(
-                      //     context,
-                      //     AddressPage(
-                      //       location: Location(
-                      //         lat: markers.first.point.latitude,
-                      //         lng: markers.first.point.longitude,
-                      //       ),
-                      //     ));
+
                       LatLng point = markers.first.point;
                       ReverseGeoCoding geoCoding = ReverseGeoCoding(
                         apiKey: APIKeys.map_box_key,
@@ -224,6 +217,16 @@ class _OfferParkingMapViewState extends State<OfferParkingMapView>
                       );
 
                       print(predection.first.placeName);
+
+                      kopenPage(
+                          context,
+                          AddAddressView(
+                            location: Location(
+                              lat: markers.first.point.latitude,
+                              lng: markers.first.point.longitude,
+                            ),
+                            address: predection.first,
+                          ));
                     },
                     label: Text(
                       'Next',
@@ -300,10 +303,6 @@ class _OfferParkingMapViewState extends State<OfferParkingMapView>
                   ),
                   layers: [
                     TileLayerOptions(
-                      // urlTemplate:
-                      //     'http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
-                      // urlTemplate:
-                      //     "https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token=${APIKeys.map_box_key}",
                       urlTemplate:
                           "https://api.mapbox.com/styles/v1/parkingsystem/ckl2tb50f1rh817obnlzr0f0b/tiles/256/{z}/{x}/{y}@2x?access_token={accessToken}",
                       additionalOptions: {
@@ -313,11 +312,6 @@ class _OfferParkingMapViewState extends State<OfferParkingMapView>
                       maxZoom: 20,
                       zoomReverse: true,
                     ),
-                    // MarkerLayerOptions(
-                    //   markers: [
-                    //     _buildLocationMarker(),
-                    //   ],
-                    // ),
                     MarkerLayerOptions(
                       markers: markers,
                     ),
@@ -327,71 +321,6 @@ class _OfferParkingMapViewState extends State<OfferParkingMapView>
               });
         });
   }
-
-  // Marker _buildLocationMarker({
-  //   Color color,
-  //   Color colorAccent,
-  //   LatLng location,
-  // }) {
-  //   return Marker(
-  //     width: zoom > 8 ? 18 + zoom : 28,
-  //     height: zoom > 8 ? 18 + zoom : 28,
-  //     point:
-  //         location ?? _currentPosition ?? _lastKnownPosition ?? _initialCamera,
-  //     builder: (ctx) => Container(
-  //       // height: 40,
-  //       // width: 40,
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.all(
-  //           Radius.circular(
-  //             50,
-  //           ),
-  //         ),
-  //         gradient: RadialGradient(
-  //           colors: [
-  //             color ?? Colors.blue,
-  //             color == null ? Colors.blue.withOpacity(0.5) : color,
-  //             //TODO: Find a way to add opacity here
-  //             // : color.withOpacity(0.5),
-  //           ],
-  //           center: Alignment.center,
-  //           tileMode: TileMode.clamp,
-  //         ),
-  //       ),
-  //       child: Container(
-  //         height: 20,
-  //         width: 20,
-  //         padding: EdgeInsets.all(2),
-  //         child: Card(
-  //           elevation: 10,
-  //           color: colorAccent ?? color ?? Colors.blueAccent,
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.all(
-  //               Radius.circular(
-  //                 30,
-  //               ),
-  //             ),
-  //           ),
-  //           child: Container(
-  //             decoration: BoxDecoration(
-  //               color: colorAccent ?? color ?? Colors.blueAccent,
-  //               border: Border.all(
-  //                 color: Colors.white,
-  //                 style: BorderStyle.solid,
-  //                 width: 2,
-  //               ),
-  //               borderRadius: BorderRadius.all(
-  //                 Radius.circular(
-  //                   50,
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 
   Marker _buildAnimatedLocationMarker({
     Color color,

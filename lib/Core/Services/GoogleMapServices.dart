@@ -2,7 +2,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:the_parker/UI/Resources/APIKeys.dart';
+import 'package:the_parker/ui/resources/APIKeys.dart';
 
 class GoogleMapsServices {
   var apiKey = APIKeys.google_map_key;

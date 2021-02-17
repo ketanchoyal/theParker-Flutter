@@ -1,9 +1,9 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:the_parker/ui/Resources/ConstantMethods.dart';
-import 'package:the_parker/ui/Resources/Resources.dart';
-import 'package:the_parker/ui/Widgets/TopBar.dart';
+import 'package:the_parker/ui/resources/ConstantMethods.dart';
+import 'package:the_parker/ui/resources/resources.dart';
+import 'package:the_parker/ui/widgets/TopBar.dart';
 import './mobile_no_login_viewmodel.dart';
 
 class MobileNoLoginView extends StatefulWidget {

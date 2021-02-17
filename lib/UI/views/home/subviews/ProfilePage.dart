@@ -1,7 +1,7 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
+import 'package:extended_navbar_scaffold/extended_navbar_scaffold.dart';
 import 'package:flutter/material.dart';
-import 'package:the_parker/UI/Resources/ConstantMethods.dart';
-import 'package:the_parker/UI/Resources/Resources.dart';
+import 'package:the_parker/ui/resources/resources.dart';
 
 class ProfilePage extends StatelessWidget {
   final double currentSearchPercent;
@@ -33,7 +33,7 @@ class ProfilePage extends StatelessWidget {
                   bottom: false,
                   child: Stack(
                     children: <Widget>[
-                      _buildProfileFields(height),
+                      // _buildProfileFields(height),
                     ],
                   ),
                 ),

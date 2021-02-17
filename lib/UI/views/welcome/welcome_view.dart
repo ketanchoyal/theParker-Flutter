@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:the_parker/ui/Resources/ConstantMethods.dart';
-import 'package:the_parker/ui/Widgets/LiquidSwipe/liquid_swipe.dart';
+import 'package:the_parker/ui/resources/ConstantMethods.dart';
 import 'package:the_parker/ui/views/login/login_view.dart';
+import 'package:the_parker/ui/widgets/LiquidSwipe/liquid_swipe.dart';
 import './welcome_viewmodel.dart';
 import 'IntroPage.dart';
 
